@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react"
 import { formatCurrency } from "../../utils/utils";
+import { fetchLedgers } from "../../services/apiLedger";
+import { redirect, useLoaderData, useNavigate } from "react-router";
+
 
 function Ledger() {
+    const theLedger = useLoaderData()
+    const navigate = useNavigate()
 
-    const [theLedger, setTheLedger] = useState([])
+    function onClickDateHandler(theId) {
+        navigate(`/ledger/${theId}`)
+    }
 
-    useEffect(function() {
-
-        async function fetchLedgers() {
-            const res = await fetch("http://chonsawat:8080/api/ledger-desc");
-            const data = await res.json();
-            setTheLedger(data)
-            console.log(data);
-        }
-
-        fetchLedgers()
-    }, [])
+    function onClickUpdateHandler(theId) {
+        navigate(`/ledger/update/${theId}`)
+    }
 
     return (
         <div>
-            <AddButton></AddButton>
             <div className="table-ledger-content my-5 mx-5">
                 <div className="flex flex-col items-center">
                     <table className="text-center min-w-max shadow-md w-full h-full">
@@ -37,14 +34,16 @@ function Ledger() {
                         <tbody>
                             {theLedger.map((ledger) => 
                                 <tr key={ledger.id} className="hover:text-bold hover:text-black hover:bg-gray-200">
-                                    <td className="p-4 border-b border-gray-200" >{ledger.date}</td>
+                                    <td className="p-4 border-b border-gray-200 hover:cursor-pointer" onClick={() => {onClickDateHandler(ledger.id)}}>{ledger.date}</td>
                                     <td className="p-4 border-b border-gray-200" >{ledger.description}</td>
-                                    <td className="p-4 border-b border-gray-200" >{ledger.credit_account_id}</td>
+                                    <td className="p-4 border-b border-gray-200" >{ledger.credit_account}</td>
                                     <td className="p-4 border-b border-gray-200 text-end" >{formatCurrency(ledger.credit_amount)}</td>
-                                    <td className="p-4 border-b border-gray-200" >{ledger.debit_account_id}</td>
+                                    <td className="p-4 border-b border-gray-200" >{ledger.debit_account}</td>
                                     <td className="p-4 border-b border-gray-200 text-end" >{formatCurrency(ledger.debit_amount)}</td>
                                     <td className="p-4 border-b border-gray-200"> 
-                                        <a className="hover:bg-orange-500 hover:cursor-pointer bg-gray-200 text-white p-3 rounded rounded-xl">Update</a>
+                                        <a className="hover:bg-orange-500 hover:cursor-pointer bg-gray-200 text-white p-3 rounded rounded-xl"
+                                            onClick={() => {onClickUpdateHandler(ledger.id)}}
+                                        >Update</a>
                                     </td>
                                 </tr>
                             )}
@@ -52,16 +51,31 @@ function Ledger() {
                     </table>
                 </div>
             </div>
+            <AddButton></AddButton>
         </div>
     )
 }
 
 function AddButton() {
+
+    const navigate = useNavigate()
+
+    function onClickAddHandler(theId) {
+        navigate(`/ledger/add`)
+    }
+
     return (
-        <div className="mx-5 add-ledger-content mt-5">
-                <a className="hover:cursor-pointer border rounded rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce">Add Ledger</a>
+        <div className="mx-5 add-ledger-content my-5">
+                <a className="hover:cursor-pointer border rounded rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce" 
+                    onClick={onClickAddHandler}>
+                    Add Ledger</a>
         </div>
     )
+}
+
+export async function loader() {
+    const data = await fetchLedgers()
+    return data
 }
 
 export default Ledger

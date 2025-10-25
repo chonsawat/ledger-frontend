@@ -1,20 +1,11 @@
 import { useEffect, useState } from "react"
 import { formatCurrency } from "../../utils/utils"
+import { useLoaderData } from "react-router"
+import { fetchAccounts } from "../../services/apiAccounts"
 
 function Accounts() {
 
-    const [accounts, setAccounts] = useState([])
-
-    useEffect(function() {
-
-        async function fetchAccounts() {
-            const res = await fetch("http://chonsawat:8080/api/accounts");
-            const data = await res.json();
-            setAccounts(data)
-        }
-
-        fetchAccounts()
-    }, [])
+    const accounts = useLoaderData()
 
     return (
         <div>
@@ -78,6 +69,11 @@ function AddBtn() {
             <a className="hover:cursor-pointer border rounded rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce">Add Account</a>
         </div>
     )
+}
+
+export async function loader() {
+    const data = fetchAccounts()
+    return data
 }
 
 export default Accounts
