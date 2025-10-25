@@ -1,2 +1,0 @@
-# ledger-frontend
-Ledger Project
