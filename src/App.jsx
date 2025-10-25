@@ -1,13 +1,12 @@
-import { useState } from 'react'
 import './App.css'
+import Ledger from './Ledger/Ledger'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <div>
-        <p>Install Tailwind first</p>
+        <p className='text-3xl font-bold'>App</p>
+        <Ledger />
       </div>
     </>
   )
