@@ -19,18 +19,6 @@ export async function fetchLedgerById(theId) {
 }
 
 export async function addLedger(newLedger) {
-  /*
-    {
-      "date": "2025-10-26",
-      "description": "temp",
-      "credit_account": {
-        "id": 2,
-        "desc": "mob-krungthai",
-        "updateDate": "2025-10-26"
-      },
-      "credit_amount": 100
-    }
-  */
   try {
     console.group("addLedger");
     console.log(newLedger);

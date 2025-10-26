@@ -1,16 +1,39 @@
-# React + Vite
+# Frontend for Ledger App
+Stack: React + Vite + Bun
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Progression
+- [ ] Account Delete
+- [ ] Account Update
+- [ ] Account Add
+- [ ] Account Detail
+- [x] Account Listing
+- [ ] Ledger Delete
+- [ ] Ledger Update
+- [x] Ledger Add
+- [x] Ledger Detail
+- [x] Ledger Listing
 
-Currently, two official plugins are available:
+## Required
+```
+"http://${API_URL}/api/ledger-desc" -- as GET Method for listing ledger
+"http://${API_URL}/api/ledger/:theId" -- as GET Method for detail ledger
+"http://${API_URL}/api/ledger" -- as POST Method for create ledger
+"http://${API_URL}/api/accounts" -- as GET Method for Listing Account
+```
+Reference backend by: ![https://github.com/chonsawat/ledger-backend](https://github.com/chonsawat/ledger-backend)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Screenshot
+Account Listing
+![](./README/accounts-listing.png)
 
-## React Compiler
+Ledger Listing
+![](./README/ledger-listing.png)
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+Ledger Search
+![](./README/ledger-search.png)
 
-## Expanding the ESLint configuration
+Ledger Detail
+![](./README/ledger-detail.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Ledger Add
+![](./README/ledger-add.png)
