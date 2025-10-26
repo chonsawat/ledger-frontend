@@ -40,21 +40,11 @@ function Ledger() {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredLedger.map((ledger) => 
-                                <tr key={ledger.id} className="hover:text-bold hover:text-black hover:bg-gray-200">
-                                    <td className="p-4 border-b border-gray-200 hover:cursor-pointer" onClick={() => {onClickDateHandler(ledger.id)}}>{ledger.date}</td>
-                                    <td className="p-4 border-b border-gray-200" >{ledger.description}</td>
-                                    <td className="p-4 border-b border-gray-200" >{ledger.credit_account ? ledger.credit_account.desc: ''}</td>
-                                    <td className="p-4 border-b border-gray-200 text-end" >{formatCurrency(ledger.credit_amount)}</td>
-                                    <td className="p-4 border-b border-gray-200" >{ledger.debit_account ? ledger.debit_account.desc : ''}</td>
-                                    <td className="p-4 border-b border-gray-200 text-end" >{formatCurrency(ledger.debit_amount)}</td>
-                                    <td className="p-4 border-b border-gray-200"> 
-                                        <a className="hover:bg-orange-500 hover:cursor-pointer bg-gray-200 text-white p-3 rounded-xl"
-                                            onClick={() => {onClickUpdateHandler(ledger.id)}}
-                                        >Update</a>
-                                    </td>
-                                </tr>
-                            )}
+                            {filteredLedger.length !== 0 ? filteredLedger.map((ledger) => 
+                                <FoundRow key={ledger.id} onClickDateHandler={onClickDateHandler} ledger={ledger} onClickUpdateHandler={onClickUpdateHandler}></FoundRow>
+                            ) : 
+                                <NotFoundRow></NotFoundRow>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -87,6 +77,40 @@ function SearchBar({onChangeFn}) {
             <AddButton></AddButton>
             <input type="text" placeholder="Search Desc" className="w-420 mt-2.5 mb-5 py-2 px-3 border rounded-xl border-gray-500" onChange={(e) => onChangeFn(e)}/>
         </div>
+    )
+}
+
+function FoundRow({ledger, onClickDateHandler, onClickUpdateHandler}) {
+    return (
+        <tr key={ledger.id} className="hover:text-bold hover:text-black hover:bg-gray-200">
+            <td className="p-4 border-b border-gray-200 hover:cursor-pointer" onClick={() => {onClickDateHandler(ledger.id)}}>{ledger.date}</td>
+            <td className="p-4 border-b border-gray-200" >{ledger.description}</td>
+            <td className="p-4 border-b border-gray-200" >{ledger.credit_account ? ledger.credit_account.desc: ''}</td>
+            <td className="p-4 border-b border-gray-200 text-end" >{formatCurrency(ledger.credit_amount)}</td>
+            <td className="p-4 border-b border-gray-200" >{ledger.debit_account ? ledger.debit_account.desc : ''}</td>
+            <td className="p-4 border-b border-gray-200 text-end" >{formatCurrency(ledger.debit_amount)}</td>
+            <td className="p-4 border-b border-gray-200"> 
+                <a className="hover:bg-orange-500 hover:cursor-pointer bg-gray-200 text-white p-3 rounded-xl"
+                    onClick={() => {onClickUpdateHandler(ledger.id)}}
+                >Update</a>
+            </td>
+        </tr>        
+    )
+}
+
+function NotFoundRow() {
+    return (
+        <tr className="hover:text-bold hover:text-black hover:bg-gray-200">
+            <td className="p-4 border-b border-gray-200 hover:cursor-pointer" >-</td>
+            <td className="p-4 border-b border-gray-200" >-</td>
+            <td className="p-4 border-b border-gray-200" >-</td>
+            <td className="p-4 border-b border-gray-200 text-end" >-</td>
+            <td className="p-4 border-b border-gray-200" >-</td>
+            <td className="p-4 border-b border-gray-200 text-end" >-</td>
+            <td className="p-4 border-b border-gray-200"> 
+                <a className="bg-gray-200 text-white p-3 rounded-xl" disabled>Update</a>
+            </td>
+        </tr>
     )
 }
 
