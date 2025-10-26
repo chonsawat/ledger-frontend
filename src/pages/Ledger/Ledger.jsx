@@ -1,10 +1,13 @@
 import { formatCurrency } from "../../utils/utils";
 import { fetchLedgers } from "../../services/apiLedger";
 import { redirect, useLoaderData, useNavigate } from "react-router";
+import { useState } from "react";
 
 
 function Ledger() {
     const theLedger = useLoaderData()
+    const [searchText, setSerachText] = useState("")
+    const filteredLedger = theLedger.filter((x) => x.description ? x.description.toLowerCase().includes(searchText.toLowerCase()) : null )
     const navigate = useNavigate()
 
     function onClickDateHandler(theId) {
@@ -15,9 +18,14 @@ function Ledger() {
         navigate(`/ledger/update/${theId}`)
     }
 
+    function onChangeHandler(e) {
+        setSerachText(e.target.value)
+    }
+
     return (
         <div>
             <div className="table-ledger-content my-5 mx-5">
+                <SearchBar onChangeFn={onChangeHandler}></SearchBar>
                 <div className="flex flex-col items-center">
                     <table className="text-center min-w-max shadow-md w-full h-full">
                         <thead>
@@ -32,13 +40,13 @@ function Ledger() {
                             </tr>
                         </thead>
                         <tbody>
-                            {theLedger.map((ledger) => 
+                            {filteredLedger.map((ledger) => 
                                 <tr key={ledger.id} className="hover:text-bold hover:text-black hover:bg-gray-200">
                                     <td className="p-4 border-b border-gray-200 hover:cursor-pointer" onClick={() => {onClickDateHandler(ledger.id)}}>{ledger.date}</td>
                                     <td className="p-4 border-b border-gray-200" >{ledger.description}</td>
-                                    <td className="p-4 border-b border-gray-200" >{ledger.credit_account}</td>
+                                    <td className="p-4 border-b border-gray-200" >{ledger.credit_account ? ledger.credit_account.desc: ''}</td>
                                     <td className="p-4 border-b border-gray-200 text-end" >{formatCurrency(ledger.credit_amount)}</td>
-                                    <td className="p-4 border-b border-gray-200" >{ledger.debit_account}</td>
+                                    <td className="p-4 border-b border-gray-200" >{ledger.debit_account ? ledger.debit_account.desc : ''}</td>
                                     <td className="p-4 border-b border-gray-200 text-end" >{formatCurrency(ledger.debit_amount)}</td>
                                     <td className="p-4 border-b border-gray-200"> 
                                         <a className="hover:bg-orange-500 hover:cursor-pointer bg-gray-200 text-white p-3 rounded rounded-xl"
@@ -51,7 +59,6 @@ function Ledger() {
                     </table>
                 </div>
             </div>
-            <AddButton></AddButton>
         </div>
     )
 }
@@ -69,6 +76,16 @@ function AddButton() {
                 <a className="hover:cursor-pointer border rounded rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce" 
                     onClick={onClickAddHandler}>
                     Add Ledger</a>
+        </div>
+    )
+}
+
+function SearchBar({onChangeFn}) {
+
+    return (
+        <div className="flex">
+            <AddButton></AddButton>
+            <input type="text" placeholder="Search Desc" className="w-420 mt-2.5 mb-5 py-2 px-3 border rounded-xl border-gray-500" onChange={(e) => onChangeFn(e)}/>
         </div>
     )
 }

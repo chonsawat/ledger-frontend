@@ -22,7 +22,7 @@ function LedgerById() {
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Credit Account: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.credit_account}/>
+                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.credit_account ? ledger.credit_account.desc : 'NULL'}/>
                 <br />
             </div>
             <div className="flex my-2 mx-2">
@@ -32,7 +32,7 @@ function LedgerById() {
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Debit Account: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.debit_account}/>
+                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.debit_account ? ledger.debit_account.desc : 'NULL'}/>
                 <br />
             </div>
             <div className="flex my-2 mx-2">
@@ -42,12 +42,12 @@ function LedgerById() {
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Total Credit Balance: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={formatCurrency(ledger.total_credit_balance)}/>
+                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.credit_account?formatCurrency(ledger.credit_account.balance):'NULL'}/>
                 <br />
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Total Debit Balance: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={formatCurrency(ledger.total_debit_balance)}/>
+                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.debit_account?formatCurrency(ledger.debit_account.balance):'NULL'}/>
                 <br />
             </div>
             <div className="my-3 mx-3">
