@@ -22,10 +22,10 @@ function Table({accounts}) {
                 <table className="text-center min-w-max shadow-md w-full h-full">
                     <thead>
                     <tr>
-                        <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white">ID</th>
-                        <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white w-[50%]">Account</th>
-                        <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white">Balance</th>
-                        <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white w-4">Update</th>
+                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">ID</th>
+                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-[50%]">Account</th>
+                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">Balance</th>
+                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-4">Update</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -58,7 +58,7 @@ function TableRow({accounts}) {
 function UpdateBtn() {
     return (
         <td className="p-4 border-b border-gray-200">
-            <a className="hover:cursor-pointer hover:bg-orange-500 bg-gray-200 text-white p-3 rounded rounded-xl">Update</a>
+            <a className="hover:cursor-pointer hover:bg-orange-500 bg-gray-200 text-white p-3 rounded-xl">Update</a>
         </td>
     )
 }
@@ -66,7 +66,7 @@ function UpdateBtn() {
 function AddBtn() {
     return (
         <div className="mx-5 add-ledger-content mb-5">
-            <a className="hover:cursor-pointer border rounded rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce">Add Account</a>
+            <a className="hover:cursor-pointer border rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce">Add Account</a>
         </div>
     )
 }

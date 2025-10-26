@@ -30,13 +30,13 @@ function Ledger() {
                     <table className="text-center min-w-max shadow-md w-full h-full">
                         <thead>
                             <tr>
-                                <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white">Date</th>
-                                <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white w-[50%]">Detail</th>
-                                <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white">Credit Account</th>
-                                <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white">Credit Amount</th>
-                                <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white">Debit Account</th>
-                                <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white">Debit Amount</th>
-                                <th className="border-spacing-5 rounded rounded-2xl py-3 px-2 bg-slate-800 text-white w-4">Update</th>
+                                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">Date</th>
+                                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-[50%]">Detail</th>
+                                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">Credit Account</th>
+                                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">Credit Amount</th>
+                                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">Debit Account</th>
+                                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">Debit Amount</th>
+                                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-4">Update</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,7 +49,7 @@ function Ledger() {
                                     <td className="p-4 border-b border-gray-200" >{ledger.debit_account ? ledger.debit_account.desc : ''}</td>
                                     <td className="p-4 border-b border-gray-200 text-end" >{formatCurrency(ledger.debit_amount)}</td>
                                     <td className="p-4 border-b border-gray-200"> 
-                                        <a className="hover:bg-orange-500 hover:cursor-pointer bg-gray-200 text-white p-3 rounded rounded-xl"
+                                        <a className="hover:bg-orange-500 hover:cursor-pointer bg-gray-200 text-white p-3 rounded-xl"
                                             onClick={() => {onClickUpdateHandler(ledger.id)}}
                                         >Update</a>
                                     </td>
@@ -73,7 +73,7 @@ function AddButton() {
 
     return (
         <div className="mx-5 add-ledger-content my-5">
-                <a className="hover:cursor-pointer border rounded rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce" 
+                <a className="hover:cursor-pointer border rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce" 
                     onClick={onClickAddHandler}>
                     Add Ledger</a>
         </div>

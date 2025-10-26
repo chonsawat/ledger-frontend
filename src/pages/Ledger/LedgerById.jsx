@@ -9,49 +9,49 @@ function LedgerById() {
 
   return (
     <div className='my-5'>
-        <form action="#" method="POST" className="border rounded rounded-xl ml-2 mr-4">
+        <form action="#" method="POST" className="border rounded-xl ml-2 mr-4">
             <div className="flex my-2 mx-2 mt-5">
                 <p className="mr-2">Date: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.date}/>
+                <input type="text" placeholder="NULL" className="rounded-sm" disabled value={ledger.date}/>
                 <br />
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Description: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.description}/>
+                <input type="text" placeholder="NULL" className="rounded-sm" disabled value={ledger.description}/>
                 <br />
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Credit Account: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.credit_account ? ledger.credit_account.desc : 'NULL'}/>
+                <input type="text" placeholder="NULL" className="rounded-sm" disabled value={ledger.credit_account ? ledger.credit_account.desc : 'NULL'}/>
                 <br />
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Credit Amount: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={formatCurrency(ledger.credit_amount)}/>
+                <input type="text" placeholder="NULL" className="rounded-sm" disabled value={formatCurrency(ledger.credit_amount)}/>
                 <br />
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Debit Account: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.debit_account ? ledger.debit_account.desc : 'NULL'}/>
+                <input type="text" placeholder="NULL" className="rounded-sm" disabled value={ledger.debit_account ? ledger.debit_account.desc : 'NULL'}/>
                 <br />
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Debit Amount: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={formatCurrency(ledger.debit_amount)}/>
+                <input type="text" placeholder="NULL" className="rounded-sm" disabled value={formatCurrency(ledger.debit_amount)}/>
                 <br />
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Total Credit Balance: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.credit_account?formatCurrency(ledger.credit_account.balance):'NULL'}/>
+                <input type="text" placeholder="NULL" className="rounded-sm" disabled value={ledger.credit_account?formatCurrency(ledger.credit_account.balance):'NULL'}/>
                 <br />
             </div>
             <div className="flex my-2 mx-2">
                 <p className="mr-2">Total Debit Balance: </p>
-                <input type="text" placeholder="NULL" className="rounded rounded-sm" disabled value={ledger.debit_account?formatCurrency(ledger.debit_account.balance):'NULL'}/>
+                <input type="text" placeholder="NULL" className="rounded-sm" disabled value={ledger.debit_account?formatCurrency(ledger.debit_account.balance):'NULL'}/>
                 <br />
             </div>
             <div className="my-3 mx-3">
-                <a className="hover:cursor-pointer hover:bg-red-700 rounded rounded-xl bg-red-500 text-white px-5 py-1.25 ml-2" onClick={() => {navigate(-1)}}>Back</a>
+                <a className="hover:cursor-pointer hover:bg-red-700 rounded-xl bg-red-500 text-white px-5 py-1.25 ml-2" onClick={() => {navigate(-1)}}>Back</a>
             </div>
         </form>
     </div>
