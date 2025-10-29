@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { formatCurrency } from "../../utils/utils"
-import { useLoaderData } from "react-router"
+import { useLoaderData, useNavigate } from "react-router"
 import { fetchAccounts } from "../../services/apiAccounts"
 
 function Accounts() {
@@ -38,12 +38,18 @@ function Table({accounts}) {
 }
 
 function TableRow({accounts}) {
+    const navigate = useNavigate()
+    
+    function onClickDateHandler(theId) {
+        navigate(`/accounts/${theId}`)
+    }
+
     return (
         <>
             {accounts.map((x) => {
                 return (
                     <tr key={x.id} className="hover:text-bold hover:text-black hover:bg-gray-200">
-                        <td className="p-4 border-b border-gray-200" >{x.id}</td>
+                        <td className="p-4 border-b border-gray-200 hover:cursor-pointer" onClick={() => onClickDateHandler(x.id)}>{x.id}</td>
                         <td className="p-4 border-b border-gray-200" >{x.desc}</td>
                         <td className="p-4 border-b border-gray-200 text-end currency-text ">{formatCurrency(x.balance)}</td>
                         <UpdateBtn ></UpdateBtn>

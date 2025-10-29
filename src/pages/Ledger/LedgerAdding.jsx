@@ -110,8 +110,6 @@ export async function action({request}) {
     const selectedCreditData = JSON.parse(data.accounts).filter((x) => x.id == credit_account.value)
     const selectedDebitData = JSON.parse(data.accounts).filter((x) => x.id == debit_account.value)
     const ledger = {
-        // credit_account: selectedCreditData !== undefined ? selectedCreditData[0] : null,
-        // debit_account: selectedDebitData !== undefined ? selectedDebitData[0] : null,
         date: data.date,
         description: data.description,
         credit_account: selectedCreditData[0],
