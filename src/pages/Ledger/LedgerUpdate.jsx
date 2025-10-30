@@ -1,11 +1,12 @@
-import { useLoaderData, useNavigate } from "react-router"
-import { formatCurrency } from "../../utils/utils"
+import { Form, useLoaderData, useLocation, useNavigate } from "react-router"
 import { useEffect, useState } from "react"
+import { fetchLedgerById } from "../../services/apiLedger"
+import { fetchAccounts } from "../../services/apiAccounts"
 
+// TODO: Update this to api
 function LedgerUpdate() {
   const [theLedger, setTheLedger] = useState({})
-  const ledger = useLoaderData()
-  const navigate = useNavigate()
+  const {ledger, accounts} = useLoaderData()
 
   useEffect(() => {
     setTheLedger(ledger)
@@ -27,54 +28,87 @@ function LedgerUpdate() {
 
   return (
       <div className="my-5">
-          <form action="#" method="POST" className="border rounded-xl ml-2 mr-4">
-              <div className="flex my-2 mx-2 mt-5">
-                  <p className="mr-2">Date: </p>
-                  <input type="text" placeholder="Date" className="rounded-sm border  " value={theLedger.date} onChange={(e) => onChangeLedger(e, "date")}/>
-                  <br />
-              </div>
-              <div className="flex my-2 mx-2">
-                  <p className="mr-2">Description: </p>
-                  <input type="text" placeholder="Description" className="rounded-sm border " value={theLedger.description} onChange={(e) => onChangeLedger(e, "description")}/>
-                  <br />
-              </div>
-              <div className="flex my-2 mx-2">
-                  <p className="mr-2">Credit Account: </p>
-                  <input type="text" placeholder="Credit Account" className="rounded-sm border  " value={theLedger.credit_account} onChange={(e) => onChangeLedger(e, "credit_account")}/>
-                  <br />
-              </div>
-              <div className="flex my-2 mx-2">
-                  <p className="mr-2">Credit Amount: </p>
-                  <input type="text" placeholder="Credit Amount" className="rounded-sm border " value={theLedger.credit_amount} onChange={(e) => onChangeLedger(e, "credit_amount")}/>
-                  <br />
-              </div>
-              <div className="flex my-2 mx-2">
-                  <p className="mr-2">Debit Account: </p>
-                  <input type="text" placeholder="Debit Account" className="rounded-sm border " value={theLedger.debit_account} onChange={(e) => onChangeLedger(e, "debit_account")}/>
-                  <br />
-              </div>
-              <div className="flex my-2 mx-2">
-                  <p className="mr-2">Debit Amount: </p>
-                  <input type="text" placeholder="Debit Amount" className="rounded-sm border  " value={theLedger.debit_amount} onChange={(e) => onChangeLedger(e, "debit_amount")}/>
-                  <br />
-              </div>
-              <div className="flex my-2 mx-2">
-                  <p className="mr-2">Total Credit Balance: </p>
-                  <input type="text" placeholder="Total Credit Balance" className="rounded-sm border  " value={theLedger.total_credit_balance} onChange={(e) => onChangeLedger(e, "total_credit_balance")}/>
-                  <br />
-              </div>
-              <div className="flex my-2 mx-2">
-                  <p className="mr-2">Total Debit Balance: </p>
-                  <input type="text" placeholder="Total Debit Balance" className="rounded-sm border " value={theLedger.total_debit_balance} onChange={(e) => onChangeLedger(e, "total_debit_balance")}/>
-                  <br />
-              </div>
-              <div className="mb-3 mx-3">
-                  <button className="hover:cursor-pointer hover:bg-lime-700 rounded-xl bg-lime-500 text-white px-5 py-1" type="submit">Add</button>
-                  <a className="hover:cursor-pointer hover:bg-red-700 rounded-xl bg-red-500 text-white px-5 py-1.25 ml-2" onClick={() => navigate(-1)}>Back</a>
-              </div>
-          </form>
+          <Form action="" method="POST" className="border rounded-xl ml-2 mr-4">
+              <DataRow name="Date" value={theLedger.date} ></DataRow>
+              <DataRow name="Description" value={theLedger.description} onChangeFn={(e) => onChangeLedger(e, "description")}></DataRow>
+              <DataRow name="Credit Account" value={theLedger.credit_account?.desc} onChangeFn={(e) => onChangeLedger(e, "credit_account")}></DataRow>
+              <AccountDropDown data={accounts} mode="credit" selected={ledger.credit_account?.id}></AccountDropDown>
+              <DataRow name="Credit Amount" value={theLedger.credit_amount} onChangeFn={(e) => onChangeLedger(e, "credit_amount")}></DataRow>
+              <AccountDropDown data={accounts} mode="debit" selected={ledger.debit_account?.id}></AccountDropDown>
+              <DataRow name="Debit Amount" value={theLedger.debit_amount} onChangeFn={(e) => onChangeLedger(e, "debit_amount")}></DataRow>
+              <ButtonSubmit></ButtonSubmit>
+          </Form>
       </div>
   )
+}
+
+function DataRow({name, value, onChangeFn}) {
+    return (
+        <div className="flex my-2 mx-2">
+            <p className="mr-2">{name}: </p>
+            <input type="text" placeholder={name} className="rounded-sm border" defaultValue={value} onChange={onChangeFn}/>
+            <br />
+        </div>
+    )
+}
+
+function AccountDropDown({data, selected, onChangeFn, mode}) {
+    const name = mode === "credit" ? "credit_account" : "debit_account"
+    const description = mode === "credit" ? "Credit Account" : "Debit Account"
+    return (
+        <div className={`flex my-2 mx-2`}>
+            <label htmlFor={name} className='mr-2'>{description}: </label>
+            <select name={name} id={name} defaultValue={selected} onChange={onChangeFn} className="border rounded-sm">
+                <option value={0}>Select an accounts</option>
+                {data.map((account) => (
+                <option key={account.id} value={account.id}>
+                    {account.id} : {account.desc}
+                </option>
+                ))}
+            </select>
+        </div>
+    )
+}
+
+function ButtonSubmit() {
+    const navigate = useNavigate()
+
+    return (
+        <div className="mb-3 mx-3">
+            <button className="hover:cursor-pointer hover:bg-orange-400 rounded-xl bg-orange-500 text-white px-5 py-1" type="submit">Update</button>
+            <a className="hover:cursor-pointer hover:bg-red-700 rounded-xl bg-red-500 text-white px-5 py-1.25 ml-2" onClick={() => navigate(-1)}>Back</a>
+        </div>
+    )
+}
+
+export async function loader({params: {theId}}) {
+    const ledgerFetched = await fetchLedgerById(theId);
+    const accountFetched = await fetchAccounts();
+    return {
+        ledger: ledgerFetched,
+        accounts: accountFetched
+    }
+}
+
+export async function action({request}) {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData) 
+    const selectedCreditData = JSON.parse(data.accounts).filter((x) => x.id == credit_account.value)
+    const selectedDebitData = JSON.parse(data.accounts).filter((x) => x.id == debit_account.value)
+    const ledger = {
+        date: data.date,
+        description: data.description,
+        credit_account: selectedCreditData[0],
+        debit_account: selectedDebitData[0],
+        credit_amount: data.credit_amount,
+        debit_amount: data.debit_amount,
+    }
+    console.group("Create Ledger")
+    console.log(ledger);
+    const newLedger = await addLedger(ledger);
+    console.log(newLedger);
+    console.groupEnd("Create Ledger")
+    return redirect("/ledger");
 }
 
 export default LedgerUpdate
