@@ -44,3 +44,57 @@ export async function addLedger(newLedger) {
     throw Error("Failed creating you order");
   }
 }
+
+export async function updateLedger(newLedger) {
+  try {
+    console.group("updateLedger");
+    console.log(newLedger);
+    console.groupEnd("updateLedger");
+    
+    const res = await fetch(`${API_URL}/api/ledger`, {
+      method: "PATCH",
+      body: JSON.stringify(newLedger),
+      headers: {
+          "Accept": "application/hal+json",
+          "Content-Type": "application/json"
+      }
+    });
+
+    if (!res.ok) {
+        const errorText = await res.text(); // Capture the raw error response
+        console.error("Error:", res.status, errorText); // Log status and error details
+        throw Error();
+    }
+    const {data} = await res.json();
+    return data
+  } catch {
+    throw Error("Failed creating you order");
+  }
+}
+
+export async function deleteLedger(newLedger) {
+  try {
+    console.group("deleteLedger");
+    console.log(newLedger);
+    console.groupEnd("deleteLedger");
+    
+    const res = await fetch(`${API_URL}/api/ledger`, {
+      method: "DELETE",
+      body: JSON.stringify(newLedger),
+      headers: {
+          "Accept": "application/hal+json",
+          "Content-Type": "application/json"
+      }
+    });
+
+    if (!res.ok) {
+        const errorText = await res.text(); // Capture the raw error response
+        console.error("Error:", res.status, errorText); // Log status and error details
+        throw Error();
+    }
+    const {data} = await res.json();
+    return data
+  } catch {
+    throw Error("Failed creating you order");
+  }
+}

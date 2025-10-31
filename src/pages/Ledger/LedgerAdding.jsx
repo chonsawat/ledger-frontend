@@ -104,7 +104,7 @@ function DebitAccountDropDown({data, selected, onChangeFn}) {
     )
 }
 
-export async function action({request}) {
+export async function action({params, request}) {
     const formData = await request.formData();
     const data = Object.fromEntries(formData) 
     const selectedCreditData = JSON.parse(data.accounts).filter((x) => x.id == credit_account.value)

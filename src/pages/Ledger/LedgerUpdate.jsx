@@ -1,6 +1,6 @@
-import { Form, useLoaderData, useLocation, useNavigate } from "react-router"
+import { Form, redirect, useLoaderData, useLocation, useNavigate } from "react-router"
 import { useEffect, useState } from "react"
-import { fetchLedgerById } from "../../services/apiLedger"
+import { fetchLedgerById, updateLedger } from "../../services/apiLedger"
 import { fetchAccounts } from "../../services/apiAccounts"
 
 // TODO: Update this to api
@@ -18,8 +18,6 @@ function LedgerUpdate() {
     if (value.split(' ')[0] === '฿') {
       value = value.split(' ')[1]
     }
-
-    console.log(value);
     
     setTheLedger((prev) => (
       {...prev, [fieldName]: value}
@@ -29,24 +27,26 @@ function LedgerUpdate() {
   return (
       <div className="my-5">
           <Form action="" method="POST" className="border rounded-xl ml-2 mr-4">
-              <DataRow name="Date" value={theLedger.date} ></DataRow>
-              <DataRow name="Description" value={theLedger.description} onChangeFn={(e) => onChangeLedger(e, "description")}></DataRow>
-              <DataRow name="Credit Account" value={theLedger.credit_account?.desc} onChangeFn={(e) => onChangeLedger(e, "credit_account")}></DataRow>
-              <AccountDropDown data={accounts} mode="credit" selected={ledger.credit_account?.id}></AccountDropDown>
-              <DataRow name="Credit Amount" value={theLedger.credit_amount} onChangeFn={(e) => onChangeLedger(e, "credit_amount")}></DataRow>
-              <AccountDropDown data={accounts} mode="debit" selected={ledger.debit_account?.id}></AccountDropDown>
-              <DataRow name="Debit Amount" value={theLedger.debit_amount} onChangeFn={(e) => onChangeLedger(e, "debit_amount")}></DataRow>
+              <DataRow name="Date" inputName="date" value={theLedger.date} ></DataRow>
+              <DataRow name="Description" inputName="description" value={theLedger.description} onChangeFn={(e) => onChangeLedger(e, "description")}></DataRow>
+              <AccountDropDown data={accounts} inputName="credit_account" mode="credit" selected={ledger.credit_account?.id}></AccountDropDown>
+              <DataRow name="Credit Amount" inputName="credit_amount" value={theLedger.credit_amount} onChangeFn={(e) => onChangeLedger(e, "credit_amount")}></DataRow>
+              <AccountDropDown data={accounts} inputName="debit_account" mode="debit" selected={ledger.debit_account?.id}></AccountDropDown>
+              <DataRow name="Debit Amount" inputName="debit_amount" value={theLedger.debit_amount} onChangeFn={(e) => onChangeLedger(e, "debit_amount")}></DataRow>
               <ButtonSubmit></ButtonSubmit>
+                <div className="hidden">
+                <input type="hidden" name="accounts" value={JSON.stringify(accounts)} />
+                </div>
           </Form>
       </div>
   )
 }
 
-function DataRow({name, value, onChangeFn}) {
+function DataRow({name, value, onChangeFn, inputName}) {
     return (
         <div className="flex my-2 mx-2">
             <p className="mr-2">{name}: </p>
-            <input type="text" placeholder={name} className="rounded-sm border" defaultValue={value} onChange={onChangeFn}/>
+            <input name={inputName} type="text" placeholder={name} className="rounded-sm border" defaultValue={value} onChange={onChangeFn} />
             <br />
         </div>
     )
@@ -90,24 +90,29 @@ export async function loader({params: {theId}}) {
     }
 }
 
-export async function action({request}) {
+export async function action({params, request}) {
+
+    const today = new Date();
+    const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`; // Format: "YYYY-MM-DD"
+
     const formData = await request.formData();
     const data = Object.fromEntries(formData) 
     const selectedCreditData = JSON.parse(data.accounts).filter((x) => x.id == credit_account.value)
     const selectedDebitData = JSON.parse(data.accounts).filter((x) => x.id == debit_account.value)
     const ledger = {
+        id: params.theId,
         date: data.date,
         description: data.description,
-        credit_account: selectedCreditData[0],
-        debit_account: selectedDebitData[0],
+        credit_account: selectedCreditData[0] ? { ...selectedCreditData[0], updateDate: formattedDate } : null,
+        debit_account: selectedDebitData[0] ? { ...selectedDebitData[0], updateDate: formattedDate } : null,
         credit_amount: data.credit_amount,
         debit_amount: data.debit_amount,
     }
-    console.group("Create Ledger")
-    console.log(ledger);
-    const newLedger = await addLedger(ledger);
-    console.log(newLedger);
-    console.groupEnd("Create Ledger")
+    console.group("Update Ledger")
+    // console.log(ledger);
+    const updatedLedger = await updateLedger(ledger);
+    console.log(updatedLedger);
+    console.groupEnd("Update Ledger")
     return redirect("/ledger");
 }
 
