@@ -1,39 +1,12 @@
-import { formatCurrency } from "../../utils/utils";
-import { fetchLedgers } from "../../services/apiLedger";
+import { formatCurrency, useShortcut } from "../../utils/utils";
+import { fetchLedgers, fetchLedgersAsGroup } from "../../services/apiLedger";
 import { redirect, useLoaderData, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 
 
 function LedgerGroup() {
-    const theLedger = useLoaderData()
+    const groupOfLedger = useLoaderData()
     const [searchText, setSerachText] = useState("")
-    const filteredLedger = theLedger.filter((x) => x.description ? x.description.toLowerCase().includes(searchText.toLowerCase()) : false )
-    const groupOfLedger = filteredLedger.reduce((accumulate, current) => {
-      // if (current.date === )
-      return [0]
-    }, [])
-
-    function groupTheLedger() {
-      // Group by date
-      filteredLedger.map((ledger) => {
-        let condition = groupOfLedger[ledger.date] === undefined
-        if (condition === true) {
-          groupOfLedger[ledger.date] = []
-        }
-        groupOfLedger[ledger.date].push({date: ledger.date, ledger})
-      })
-
-      // Order by date desc
-      // groupOfLedger = Object.keys(groupOfLedger).sort((a,b) => b-a).reduce((sortedObj, key) => {
-      //   sortedObj[key] = groupOfLedger[key]
-      //   return sortedObj
-      // }, {})
-    }
-
-    groupTheLedger()
-    console.log("Group");
-    console.log(groupOfLedger);
-    
 
     const navigate = useNavigate()
 
@@ -54,18 +27,45 @@ function LedgerGroup() {
             <div className="table-ledger-content my-5 mx-5">
                 <SearchBar onChangeFn={onChangeHandler}></SearchBar>
                 <div className="flex flex-col items-center">
-                  {groupOfLedger.length > 0 ?groupOfLedger.map((ledgerByDate) => {
-                    <table className="text-center min-w-max shadow-md w-full h-full">
-                      <TableHeader></TableHeader>
-                      <tbody>
-                          {filteredLedger.length !== 0 ? filteredLedger.map((ledger) => 
-                              <FoundRow key={ledger.id} onClickDateHandler={onClickDateHandler} ledger={ledger} onClickUpdateHandler={onClickUpdateHandler}></FoundRow>
-                          ) : 
-                              <NotFoundRow></NotFoundRow>
-                          }
-                      </tbody>
-                    </table>
-                  }) : ""}
+                  {Object.entries(groupOfLedger).length > 0 ? Object.entries(groupOfLedger)?.map(([key, ledgerByDate]) => {
+                    const filteredLedger = ledgerByDate.filter((x) => x.description ? x.description.toLowerCase().includes(searchText.toLowerCase()) : null )
+                    
+                    if (filteredLedger.length > 0) {
+                        let creditTotal = 0
+                        let debitTotal = 0
+                        
+                        return (
+                            <div key={key} className="w-full">
+                                <table className="text-center min-w-max shadow-md w-full">
+                                    <TableHeader></TableHeader>
+                                    <tbody>
+                                        {filteredLedger?.map((ledger) => {
+                                                if (ledger.credit_amount !== null) {
+                                                    creditTotal = creditTotal + ledger.credit_amount
+                                                }
+                                                if (ledger.debit_amount !== null) {
+                                                    debitTotal = debitTotal + ledger.debit_amount
+                                                }
+                                                return (
+                                                        <FoundRow key={ledger.id} onClickDateHandler={onClickDateHandler} ledger={ledger} onClickUpdateHandler={onClickUpdateHandler}></FoundRow>
+                                                )
+                                            }
+                                            )
+                                        }
+                                    </tbody>
+                                </table>
+                                <div className="flex my-3 w-full justify-end">
+                                    <div className="flex border rounded-2xl px-3 py-2 border-gray-300 ">
+                                        <p className="mx-5">Total Credit: {formatCurrency(creditTotal)}</p>
+                                        <p className="mx-5">Total Debit: {formatCurrency(debitTotal)}</p>
+                                    </div>
+                                </div>
+                                <div className="mb-10"></div>
+                            </div>
+                        ) 
+                    }
+
+                  }) : "NONE" }
                 </div>
             </div>
         </div>
@@ -96,8 +96,12 @@ function AddButton() {
         navigate(`/ledger/add`)
     }
 
+    useShortcut('a', () => {
+        onClickAddHandler()
+    })  
+
     return (
-        <div className="mx-5 add-ledger-content my-5">
+        <div className="mx-5 add-ledger-content my-5 sm:w-[20%] md:w-[20%] md:mr-0">
                 <a className="hover:cursor-pointer border rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce" 
                     onClick={onClickAddHandler}>
                     Add Ledger</a>
@@ -110,7 +114,7 @@ function SearchBar({onChangeFn}) {
     return (
         <div className="flex">
             <AddButton></AddButton>
-            <input type="text" placeholder="Search Desc" className="w-420 mt-2.5 mb-5 py-2 px-3 border rounded-xl border-gray-500" onChange={(e) => onChangeFn(e)}/>
+            <input type="text" placeholder="Search Desc" className="w-420 mt-2.5 mb-5 py-2 px-3 border rounded-xl border-gray-500 sm:w-[75%] md:w-[90%] lg:w-full" onChange={(e) => onChangeFn(e)}/>
         </div>
     )
 }
@@ -150,7 +154,7 @@ function NotFoundRow() {
 }
 
 export async function loader() {
-    const data = await fetchLedgers()
+    const data = await fetchLedgersAsGroup()
     return data
 }
 

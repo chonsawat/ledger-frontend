@@ -1,6 +1,6 @@
-import { formatCurrency } from "../../utils/utils";
+import { formatCurrency, useShortcut } from "../../utils/utils";
 import { fetchLedgers } from "../../services/apiLedger";
-import { redirect, useLoaderData, useNavigate } from "react-router";
+import { redirect, useLoaderData, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 
 
@@ -56,15 +56,26 @@ function Ledger() {
 function AddButton() {
 
     const navigate = useNavigate()
+    const location = useLocation()
 
-    function onClickAddHandler(theId) {
+    function onClickAddHandler() {
+        navigate(`/ledger/add`, )
+    }
+
+    useShortcut('a', () => {
+        onClickAddHandler()
+    })  
+
+    function onClickAddHandler() {
         navigate(`/ledger/add`)
     }
 
     return (
         <div className="mx-5 add-ledger-content my-5">
                 <a className="hover:cursor-pointer border rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce" 
-                    onClick={onClickAddHandler}>
+                    onClick={onClickAddHandler}
+                    
+                    >
                     Add Ledger</a>
         </div>
     )

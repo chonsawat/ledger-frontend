@@ -9,6 +9,15 @@ export async function fetchLedgers() {
   return data
 }
 
+export async function fetchLedgersAsGroup() {
+  const res = await fetch(`${API_URL}/api/ledgerGroupByDate`);
+
+  if (!res.ok) throw Error("Fail to fetch data")
+
+  const data = await res.json();
+  return data
+}
+
 export async function fetchLedgerById(theId) {
   const res = await fetch(`${API_URL}/api/ledger/${theId}`)
 

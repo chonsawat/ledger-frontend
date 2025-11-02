@@ -1,0 +1,14 @@
+version: 3
+name: Ledger Application
+services:
+  db:
+    container_name: database
+    image: postgres
+    restart: always
+    encironment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: application
+    port:
+      - "5555:5432"
+  

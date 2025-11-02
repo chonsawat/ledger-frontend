@@ -4,7 +4,7 @@ import { fetchLedgerById, updateLedger } from "../../services/apiLedger"
 import { fetchAccounts } from "../../services/apiAccounts"
 
 // TODO: Update this to api
-function LedgerUpdate() {
+function LedgerUpdate({targetPage}) {
   const [theLedger, setTheLedger] = useState({})
   const {ledger, accounts} = useLoaderData()
 
@@ -109,11 +109,9 @@ export async function action({params, request}) {
         debit_amount: data.debit_amount,
     }
     console.group("Update Ledger")
-    // console.log(ledger);
     const updatedLedger = await updateLedger(ledger);
-    console.log(updatedLedger);
     console.groupEnd("Update Ledger")
-    return redirect("/ledger");
+    return window.history.back();
 }
 
 export default LedgerUpdate

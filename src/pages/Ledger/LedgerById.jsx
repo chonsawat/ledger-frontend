@@ -80,11 +80,10 @@ export async function action({params}) {
         id: params.theId
     }
     console.group("Delete Ledger")
-    console.log(ledger);
     
     const deletedLedger = await deleteLedger(ledger);
     console.groupEnd("Delete Ledger")
-    return redirect("/ledger");
+    return window.history.back();
 }
 
 export default LedgerById

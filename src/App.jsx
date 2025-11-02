@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router"
 import './App.css'
 import Ledger, {loader as fetchLedgers} from './pages/Ledger/Ledger'
-// import LedgerGroup, {loader as fetchLedgers} from './pages/Ledger/LedgerGroup'
 import LedgerAdding, {
   action as addLedger} from './pages/Ledger/LedgerAdding'
 import LedgerUpdate, {
@@ -16,11 +15,15 @@ import AccountAdding from './pages/Account/AccountAdding'
 import AccountById, {
   loader as fetchAccountById } from './pages/Account/AccountById'
 import AppLayout from "./AppLayout"
+import LedgerGroup, {
+  loader as fetchLedgersAsGroup
+} from "./pages/Ledger/LedgerGroup"
 
 const router = createBrowserRouter([
   {path: "/", element: <AppLayout></AppLayout>, children: [
     {path: "/ledger", element: <Ledger></Ledger>, loader: fetchLedgers},
-    {path: "/ledger/add", element: <LedgerAdding></LedgerAdding>, loader: fetchAccounts, action: addLedger},
+    {path: "/ledger/groupByDate", element: <LedgerGroup></LedgerGroup>, loader: fetchLedgersAsGroup},
+    {path: "/ledger/add", element: <LedgerAdding></LedgerAdding>, loader: fetchAccounts, action: (e) => addLedger(e, {bewnaja: 500})},
     {path: "/ledger/update/:theId", element: <LedgerUpdate></LedgerUpdate>, loader: fetchLedgerUpdate, action: updateLedger },
     {path: "/ledger/:theId", element: <LedgerById></LedgerById>, loader: fetchLedgerById, action: deleteAccountById },
     {path: "/accounts", element: <Accounts></Accounts>, loader: fetchAccounts},
