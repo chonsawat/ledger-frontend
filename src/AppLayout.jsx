@@ -16,8 +16,9 @@ function AppLayout() {
       <div className='px-5 py-2 bg-neutral-700 text-xl text-white rounded-2xl ml-2 mt-2 mr-5 mb-0 flex'>
         <h2>LEDGER PROJECT</h2>
         <Link to={"/accounts"} className={`${pathLocation.account}  hover:bg-cyan-500 rounded-md px-3 ml-5 mr-2`}>ACCOUNTS</Link>
-        <Link to={"/ledger"}  className={`${pathLocation.ledger} hover:bg-cyan-500 rounded-md px-3 mr-2`}>LEDGER</Link>
-        <Link to={"/ledger/groupByDate"} className={`${pathLocation.ledgerGroup} hover:bg-cyan-500 rounded-md px-3 mr-2`}>LEDGER (GROUP BY DATE)</Link>
+        <Link to={"/ledger"} className={`${pathLocation.ledger} hover:bg-cyan-500 rounded-md px-3 mr-2`}>LEDGER</Link>
+        <Link to={"/ledger/groupByDate"} className={`${pathLocation.ledgerGroup} hover:bg-cyan-500 rounded-md px-3 mr-2`}>
+          LEDGER (GROUP BY DATE)</Link>
       </div>
       <Outlet></Outlet>
     </>

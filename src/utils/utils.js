@@ -9,7 +9,7 @@ export function formatCurrency(currency) {
 export const useShortcut = (shortcut, callback) => {
   const handleKeyDown = (event) => {
     // Single key shortcuts (e.g. pressing a)
-    if (shortcut === event.key) {
+    if (shortcut === event.key && event.ctrlKey) {
       return callback(event)
     }
   }
