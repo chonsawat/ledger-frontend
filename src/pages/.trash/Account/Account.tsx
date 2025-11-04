@@ -1,51 +1,58 @@
-import { useEffect, useState } from "react"
 import { formatCurrency } from "../../../utils/utils"
 import { useLoaderData, useNavigate } from "react-router"
 import { fetchAccounts } from "../../../services/apiAccounts"
 
+export type AccountType = {
+    id: number,
+    desc: string,
+    balance: number
+}
+
 function Accounts() {
-
-    const accounts = useLoaderData()
-
     return (
         <div>
-            <Table accounts={accounts}></Table>
+            <AccountTable></AccountTable>
             <AddBtn></AddBtn>
         </div>
     )
 }
 
-function Table({accounts}) {
+function AccountTable() {
     return (
         <div className="table-ledger-content my-5 mx-5">
             <div className="flex flex-col items-center">
                 <table className="text-center min-w-max shadow-md w-full h-full">
-                    <thead>
-                    <tr>
-                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">ID</th>
-                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-[50%]">Account</th>
-                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">Balance</th>
-                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-4">Update</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <TableRow accounts={accounts}></TableRow>
-                    </tbody>
+                    <AccountHeading></AccountHeading>
+                    <AccountRow></AccountRow>
                 </table>
             </div>
         </div>
     )
 }
 
-function TableRow({accounts}) {
+function AccountHeading() {
+    return (
+        <thead>
+            <tr>
+                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">ID</th>
+                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-[50%]">Account</th>
+                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">Balance</th>
+                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-4">Update</th>
+            </tr>
+        </thead>
+    )
+}
+
+function AccountRow() {
     const navigate = useNavigate()
-    
-    function onClickDateHandler(theId) {
+    const accounts: AccountType[] = useLoaderData()
+
+    function onClickDateHandler(theId: number) {
         navigate(`/accounts/${theId}`)
     }
 
     return (
-        <>
+        <tbody>
             {accounts.map((x) => {
                 return (
                     <tr key={x.id} className="hover:text-bold hover:text-black hover:bg-gray-200">
@@ -56,8 +63,7 @@ function TableRow({accounts}) {
                     </tr>
                 )
             })}
-        </>
-            
+        </tbody>
     )
 }
 

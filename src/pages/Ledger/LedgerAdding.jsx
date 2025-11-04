@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { redirect, useLoaderData, useNavigate } from "react-router"
 import { Form } from "react-router-dom"
 import { addLedger } from "../../services/apiLedger"
+import { useShortcut } from "../../utils/utils"
 
 function LedgerAdding({previousPage}) {
     const navigate = useNavigate()
@@ -17,6 +18,10 @@ function LedgerAdding({previousPage}) {
     function handleAccountChangeDebit(e) {
         setSelectedDebitAccount(e.target.value)
     }
+
+    useShortcut('Escape', () => {
+        navigate(-1)
+    })  
 
     useEffect(() => {
         const today = new Date();

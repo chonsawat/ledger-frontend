@@ -96,7 +96,7 @@ function AddButton() {
         navigate(`/ledger/add`)
     }
 
-    useShortcut('a', () => {
+    useShortcut('A', () => {
         onClickAddHandler()
     })  
 

@@ -16,5 +16,6 @@
     "noEmit": true,
     "strictNullChecks": true,
   },
-  "include": ["./src", "src/pages/.trash/Account.jsx"]
+  "include": ["./src", "src/pages/.trash/Ledger/LedgerAdding.tsx", "src/pages/.trash/Ledger/Ledger.tsx", "src/pages/.trash/Account/Account.tsx"],
+  "exclude": ["./src/.trash"]
 }

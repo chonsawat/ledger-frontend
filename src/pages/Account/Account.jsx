@@ -1,58 +1,51 @@
+import { useEffect, useState } from "react"
 import { formatCurrency } from "../../utils/utils"
 import { useLoaderData, useNavigate } from "react-router"
 import { fetchAccounts } from "../../services/apiAccounts"
 
-export type AccountType = {
-    id: number,
-    desc: string,
-    balance: number
-}
-
 function Accounts() {
+
+    const accounts = useLoaderData()
+
     return (
         <div>
-            <AccountTable></AccountTable>
+            <Table accounts={accounts}></Table>
             <AddBtn></AddBtn>
         </div>
     )
 }
 
-function AccountTable() {
+function Table({accounts}) {
     return (
         <div className="table-ledger-content my-5 mx-5">
             <div className="flex flex-col items-center">
                 <table className="text-center min-w-max shadow-md w-full h-full">
-                    <AccountHeading></AccountHeading>
-                    <AccountRow></AccountRow>
+                    <thead>
+                    <tr>
+                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">ID</th>
+                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-[50%]">Account</th>
+                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">Balance</th>
+                        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-4">Update</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <TableRow accounts={accounts}></TableRow>
+                    </tbody>
                 </table>
             </div>
         </div>
     )
 }
 
-function AccountHeading() {
-    return (
-        <thead>
-            <tr>
-                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">ID</th>
-                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-[50%]">Account</th>
-                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">Balance</th>
-                <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-4">Update</th>
-            </tr>
-        </thead>
-    )
-}
-
-function AccountRow() {
+function TableRow({accounts}) {
     const navigate = useNavigate()
-    const accounts: AccountType[] = useLoaderData()
-
-    function onClickDateHandler(theId: number) {
+    
+    function onClickDateHandler(theId) {
         navigate(`/accounts/${theId}`)
     }
 
     return (
-        <tbody>
+        <>
             {accounts.map((x) => {
                 return (
                     <tr key={x.id} className="hover:text-bold hover:text-black hover:bg-gray-200">
@@ -63,7 +56,8 @@ function AccountRow() {
                     </tr>
                 )
             })}
-        </tbody>
+        </>
+            
     )
 }
 

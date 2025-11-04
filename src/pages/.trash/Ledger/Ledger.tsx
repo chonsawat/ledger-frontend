@@ -1,8 +1,8 @@
-import { formatCurrency, useShortcut } from "../../utils/utils";
-import { fetchLedgers } from "../../services/apiLedger";
+import { formatCurrency, useShortcut } from "../../../utils/utils";
+import { fetchLedgers } from "../../../services/apiLedger";
 import { redirect, useLoaderData, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
-import { LedgerType } from "../../store/ledger";
+import { LedgerType } from "../../../store/ledger";
 
 function Ledger() {
     const theLedger = useLoaderData()

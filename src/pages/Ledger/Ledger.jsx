@@ -59,16 +59,12 @@ function AddButton() {
     const location = useLocation()
 
     function onClickAddHandler() {
-        navigate(`/ledger/add`, )
-    }
-
-    useShortcut('a', () => {
-        onClickAddHandler()
-    })  
-
-    function onClickAddHandler() {
         navigate(`/ledger/add`)
     }
+
+    useShortcut('A', () => {
+        onClickAddHandler()
+    })  
 
     return (
         <div className="mx-5 add-ledger-content my-5">
