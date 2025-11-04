@@ -1,6 +1,8 @@
+import { AccountType } from "../pages/Account/Account";
+
 const API_URL = import.meta.env.VITE_API_URL
 
-export async function fetchAccounts() {
+export async function fetchAccounts(): Promise<AccountType[]> {
   const res = await fetch(`${API_URL}/api/accounts`);
 
   if (!res.ok) throw Error("Fail to fetch data")
@@ -9,7 +11,7 @@ export async function fetchAccounts() {
   return data
 }
 
-export async function fetchAccountById(theId) {
+export async function fetchAccountById(theId: number) : Promise<AccountType> {
   const res = await fetch(`${API_URL}/api/account/${theId}`)
 
   if (!res.ok) throw Error("Fail to fetch data")

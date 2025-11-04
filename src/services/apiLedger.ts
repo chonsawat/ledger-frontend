@@ -1,3 +1,5 @@
+import { LedgerType } from "../store/ledger";
+
 const API_URL = import.meta.env.VITE_API_URL
 
 export async function fetchLedgers() {
@@ -18,90 +20,90 @@ export async function fetchLedgersAsGroup() {
   return data
 }
 
-export async function fetchLedgerById(theId) {
+export async function fetchLedgerById(theId: number) {
   const res = await fetch(`${API_URL}/api/ledger/${theId}`)
 
   if (!res.ok) throw Error("Fail to fetch data")
-    
+
   const data = await res.json();
   return data
 }
 
-export async function addLedger(newLedger) {
+export async function addLedger(newLedger: unknown) {
   try {
     console.group("addLedger");
     console.log(newLedger);
-    console.groupEnd("addLedger");
-    
+    console.groupEnd();
+
     const res = await fetch(`${API_URL}/api/ledger`, {
       method: "POST",
       body: JSON.stringify(newLedger),
       headers: {
-          "Accept": "application/hal+json",
-          "Content-Type": "application/json"
+        "Accept": "application/hal+json",
+        "Content-Type": "application/json"
       }
     });
 
     if (!res.ok) {
-        const errorText = await res.text(); // Capture the raw error response
-        console.error("Error:", res.status, errorText); // Log status and error details
-        throw Error();
+      const errorText = await res.text(); // Capture the raw error response
+      console.error("Error:", res.status, errorText); // Log status and error details
+      throw Error();
     }
-    const {data} = await res.json();
+    const { data } = await res.json();
     return data
   } catch {
     throw Error("Failed creating you order");
   }
 }
 
-export async function updateLedger(newLedger) {
+export async function updateLedger(newLedger: LedgerType) {
   try {
     console.group("updateLedger");
     console.log(newLedger);
-    console.groupEnd("updateLedger");
-    
+    console.groupEnd();
+
     const res = await fetch(`${API_URL}/api/ledger`, {
       method: "PATCH",
       body: JSON.stringify(newLedger),
       headers: {
-          "Accept": "application/hal+json",
-          "Content-Type": "application/json"
+        "Accept": "application/hal+json",
+        "Content-Type": "application/json"
       }
     });
 
     if (!res.ok) {
-        const errorText = await res.text(); // Capture the raw error response
-        console.error("Error:", res.status, errorText); // Log status and error details
-        throw Error();
+      const errorText = await res.text(); // Capture the raw error response
+      console.error("Error:", res.status, errorText); // Log status and error details
+      throw Error();
     }
-    const {data} = await res.json();
+    const { data } = await res.json();
     return data
   } catch {
     throw Error("Failed creating you order");
   }
 }
 
-export async function deleteLedger(newLedger) {
+export async function deleteLedger(newLedger: { id: number }) {
   try {
     console.group("deleteLedger");
     console.log(newLedger);
-    console.groupEnd("deleteLedger");
-    
+    console.groupEnd();
+
     const res = await fetch(`${API_URL}/api/ledger`, {
       method: "DELETE",
       body: JSON.stringify(newLedger),
       headers: {
-          "Accept": "application/hal+json",
-          "Content-Type": "application/json"
+        "Accept": "application/hal+json",
+        "Content-Type": "application/json"
       }
     });
 
     if (!res.ok) {
-        const errorText = await res.text(); // Capture the raw error response
-        console.error("Error:", res.status, errorText); // Log status and error details
-        throw Error();
+      const errorText = await res.text(); // Capture the raw error response
+      console.error("Error:", res.status, errorText); // Log status and error details
+      throw Error();
     }
-    const {data} = await res.json();
+    const { data } = await res.json();
     return data
   } catch {
     throw Error("Failed creating you order");

@@ -4,45 +4,46 @@ import { fetchLedgerById, updateLedger } from "../../services/apiLedger"
 import { fetchAccounts } from "../../services/apiAccounts"
 
 // TODO: Update this to api
-function LedgerUpdate({targetPage}) {
-  const [theLedger, setTheLedger] = useState({})
-  const {ledger, accounts} = useLoaderData()
+function LedgerUpdate() {
+    const [theLedger, setTheLedger] = useState({})
+    const { ledger, accounts } = useLoaderData()
 
-  useEffect(() => {
-    setTheLedger(ledger)
-  }, [])
+    useEffect(() => {
+        setTheLedger(ledger)
+    }, [])
 
-  function onChangeLedger(e, fieldName) {
+    function onChangeLedger(e, fieldName) {
 
-    let value = e.target.value
-    if (value.split(' ')[0] === '฿') {
-      value = value.split(' ')[1]
+        let value = e.target.value
+        if (value.split(' ')[0] === '฿') {
+            value = value.split(' ')[1]
+        }
+
+        setTheLedger((prev) => (
+            { ...prev, [fieldName]: value }
+        ))
     }
-    
-    setTheLedger((prev) => (
-      {...prev, [fieldName]: value}
-    ))
-  }
 
-  return (
-      <div className="my-5">
-          <Form action="" method="POST" className="border rounded-xl ml-2 mr-4">
-              <DataRow name="Date" inputName="date" value={theLedger.date} ></DataRow>
-              <DataRow name="Description" inputName="description" value={theLedger.description} onChangeFn={(e) => onChangeLedger(e, "description")}></DataRow>
-              <AccountDropDown data={accounts} inputName="credit_account" mode="credit" selected={ledger.credit_account?.id}></AccountDropDown>
-              <DataRow name="Credit Amount" inputName="credit_amount" value={theLedger.credit_amount} onChangeFn={(e) => onChangeLedger(e, "credit_amount")}></DataRow>
-              <AccountDropDown data={accounts} inputName="debit_account" mode="debit" selected={ledger.debit_account?.id}></AccountDropDown>
-              <DataRow name="Debit Amount" inputName="debit_amount" value={theLedger.debit_amount} onChangeFn={(e) => onChangeLedger(e, "debit_amount")}></DataRow>
-              <ButtonSubmit></ButtonSubmit>
+    return (
+        <div className="my-5">
+            <Form action="" method="POST" className="border rounded-xl ml-2 mr-4">
+                <DataRow name="Date" inputName="date" value={theLedger.date} ></DataRow>
+                <DataRow name="Description" inputName="description" value={theLedger.description} onChangeFn={(e) => onChangeLedger(e, "description")}></DataRow>
+                <AccountDropDown data={accounts} inputName="credit_account" mode="credit" selected={ledger.credit_account?.id}></AccountDropDown>
+                <DataRow name="Credit Amount" inputName="credit_amount" value={theLedger.credit_amount} onChangeFn={(e) => onChangeLedger(e, "credit_amount")}></DataRow>
+                <AccountDropDown data={accounts} inputName="debit_account" mode="debit" selected={ledger.debit_account?.id}></AccountDropDown>
+                <DataRow name="Debit Amount" inputName="debit_amount" value={theLedger.debit_amount} onChangeFn={(e) => onChangeLedger(e, "debit_amount")}></DataRow>
+                <ButtonSubmit></ButtonSubmit>
                 <div className="hidden">
-                <input type="hidden" name="accounts" value={JSON.stringify(accounts)} />
+                    <input type="hidden" name="accounts" value={JSON.stringify(accounts)} />
                 </div>
-          </Form>
-      </div>
-  )
+            </Form>
+        </div>
+    )
 }
 
-function DataRow({name, value, onChangeFn, inputName}) {
+type DataRowType = { name: string, value: string, onChangeFn: () => {}, inputName: string }
+function DataRow({ name, value, onChangeFn, inputName }: DataRowType) {
     return (
         <div className="flex my-2 mx-2">
             <p className="mr-2">{name}: </p>
@@ -52,7 +53,7 @@ function DataRow({name, value, onChangeFn, inputName}) {
     )
 }
 
-function AccountDropDown({data, selected, onChangeFn, mode}) {
+function AccountDropDown({ data, selected, onChangeFn, mode }) {
     const name = mode === "credit" ? "credit_account" : "debit_account"
     const description = mode === "credit" ? "Credit Account" : "Debit Account"
     return (
@@ -61,9 +62,9 @@ function AccountDropDown({data, selected, onChangeFn, mode}) {
             <select name={name} id={name} defaultValue={selected} onChange={onChangeFn} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
                 {data.map((account) => (
-                <option key={account.id} value={account.id}>
-                    {account.id} : {account.desc}
-                </option>
+                    <option key={account.id} value={account.id}>
+                        {account.id} : {account.desc}
+                    </option>
                 ))}
             </select>
         </div>
@@ -81,7 +82,7 @@ function ButtonSubmit() {
     )
 }
 
-export async function loader({params: {theId}}) {
+export async function loader({ params: { theId } }) {
     const ledgerFetched = await fetchLedgerById(theId);
     const accountFetched = await fetchAccounts();
     return {
@@ -90,13 +91,13 @@ export async function loader({params: {theId}}) {
     }
 }
 
-export async function action({params, request}) {
+export async function action({ params, request }: { params: unknown, request: unknown }) {
 
     const today = new Date();
     const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`; // Format: "YYYY-MM-DD"
 
     const formData = await request.formData();
-    const data = Object.fromEntries(formData) 
+    const data = Object.fromEntries(formData)
     const selectedCreditData = JSON.parse(data.accounts).filter((x) => x.id == credit_account.value)
     const selectedDebitData = JSON.parse(data.accounts).filter((x) => x.id == debit_account.value)
     const ledger = {
@@ -110,7 +111,7 @@ export async function action({params, request}) {
     }
     console.group("Update Ledger")
     const updatedLedger = await updateLedger(ledger);
-    console.groupEnd("Update Ledger")
+    console.groupEnd()
     return window.history.back();
 }
 

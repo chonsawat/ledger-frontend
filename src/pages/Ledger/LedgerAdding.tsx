@@ -1,11 +1,12 @@
 import React, { HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute, useEffect, useState } from "react"
 import { redirect, useLoaderData, useNavigate } from "react-router"
 import { Form } from "react-router-dom"
-import { addLedger } from "../../../services/apiLedger"
-import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { newLedgerDetail, newLedgerDetailAccountSelected } from "../../../store/ledger"
-import { AccountType } from "../../Account/Account"
-import { LedgerType } from "../../../store/ledger" 
+import { useAtom, useAtomValue } from "jotai"
+
+import { newLedgerDetail, newLedgerDetailAccountSelected } from "../../store/ledger"
+import { addLedger } from "../../services/apiLedger"
+import { AccountType } from "../Account/Account"
+import { LedgerType } from "../../store/ledger" 
 
 function LedgerAdding() {
     const navigate = useNavigate()

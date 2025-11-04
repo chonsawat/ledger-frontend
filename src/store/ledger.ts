@@ -5,20 +5,21 @@ export type LedgerType = {
   description: string
   date: string,
   credit_account: {
-      id: number,
-      desc: string
+    id: number,
+    desc: string
   }
   credit_amount: number
   debit_account: {
-      id: number,
-      desc: string
+    id: number,
+    desc: string
   }
   debit_amount: number
 }
 
-export const newLedgerDetail = atom<LedgerType>()
+export const newLedgerDetail = atom({})
 export const newLedgerDetailAccountSelected = atom({
-    creditAccount: 0,
-    debitAccount: 0,
-  }
+  creditAccount: 0,
+  debitAccount: 0,
+}
 )
+export const searchLedgerDescription = atom<string>("");

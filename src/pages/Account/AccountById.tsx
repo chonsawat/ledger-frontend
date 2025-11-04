@@ -17,7 +17,7 @@ export default function AccountById() {
   )
 }
 
-export async function loader({params: {theId}}) {
+export async function loader({params: {theId}}: {params: {theId: number}}) {
     const data = await fetchAccountById(theId);
     return data
 }

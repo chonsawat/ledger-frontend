@@ -3,7 +3,7 @@
     "target": "es5",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "strict": true,
-    "allowJs": true,
+    // "allowJs": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "esModuleInterop": true,
@@ -16,6 +16,5 @@
     "noEmit": true,
     "strictNullChecks": true,
   },
-  "include": ["./src", "src/pages/.trash/Ledger/LedgerAdding.tsx", "src/pages/.trash/Ledger/Ledger.tsx", "src/pages/.trash/Account/Account.tsx"],
-  "exclude": ["./src/.trash"]
+  "include": ["./src", "vite-env.d.ts"],
 }

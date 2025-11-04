@@ -30,11 +30,11 @@ const router = createBrowserRouter([
     path: "/", element: <AppLayout></AppLayout>, children: [
       { path: "/ledger", element: <Ledger></Ledger>, loader: fetchLedgers },
       { path: "/ledger/groupByDate", element: <LedgerGroup></LedgerGroup>, loader: fetchLedgersAsGroup },
-      { path: "/ledger/add", element: <LedgerAdding></LedgerAdding>, loader: fetchAccounts, action: (e) => addLedger(e, { bewnaja: 500 }) },
-      { path: "/ledger/update/:theId", element: <LedgerUpdate></LedgerUpdate>, loader: fetchLedgerUpdate, action: updateLedger },
-      { path: "/ledger/:theId", element: <LedgerById></LedgerById>, loader: fetchLedgerById, action: deleteAccountById },
+      { path: "/ledger/add", element: <LedgerAdding></LedgerAdding>, loader: fetchAccounts, action: (e) => addLedger(e) },
+      { path: "/ledger/update/:theId", element: <LedgerUpdate></LedgerUpdate>, loader: fetchLedgerUpdate as any, action: updateLedger },
+      { path: "/ledger/:theId", element: <LedgerById></LedgerById>, loader: fetchLedgerById as any, action: deleteAccountById },
       { path: "/accounts", element: <Accounts></Accounts>, loader: fetchAccounts },
-      { path: "/accounts/:theId", element: <AccountById></AccountById>, loader: fetchAccountById },
+      { path: "/accounts/:theId", element: <AccountById></AccountById>, loader: fetchAccountById as any },
       { path: "/accounts/add", element: <AccountAdding></AccountAdding> },
     ]
   },
