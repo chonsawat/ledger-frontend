@@ -22,7 +22,7 @@ export async function fetchLedgersAsGroup() {
 }
 
 export async function fetchLedgerById(theId: number) {
-  devDebug("fetchLedgerById", function () {
+  devDebug("fetchLedgerById - API", function () {
     console.log(`theId: ${theId}`);
   })
 
@@ -31,7 +31,7 @@ export async function fetchLedgerById(theId: number) {
   if (!res.ok) throw Error("Fail to fetch data")
 
   const data = await res.json();
-  devDebug("fetchLedgerById: data", function() {
+  devDebug("fetchLedgerById: data", function () {
     console.log(data);
   })
   return data
@@ -66,9 +66,9 @@ export async function addLedger(newLedger: unknown) {
 
 export async function updateLedger(newLedger: LedgerType) {
   try {
-    console.group("updateLedger");
-    console.log(newLedger);
-    console.groupEnd();
+    devDebug("updateLedger - API", function () {
+      console.log(newLedger);
+    })
 
     const res = await fetch(`${API_URL}/api/ledger`, {
       method: "PATCH",

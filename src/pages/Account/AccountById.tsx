@@ -1,11 +1,11 @@
 import React from 'react'
 import { fetchAccountById } from '../../services/apiAccounts';
 import { useLoaderData } from 'react-router';
-import { formatCurrency } from '../../utils/utils';
+import { devDebug, formatCurrency } from '../../utils/utils';
 
 export default function AccountById() {
   const theAccount = useLoaderData()
-  
+
   return (
     <div className='mx-5 my-5 border rounded-2xl p-5'>
       <p>ID: {theAccount.id}</p>
@@ -17,7 +17,10 @@ export default function AccountById() {
   )
 }
 
-export async function loader({params: {theId}}: {params: {theId: number}}) {
-    const data = await fetchAccountById(theId);
-    return data
+export async function loader({ params: { theId } }: { params: { theId: number } }) {
+  const data = await fetchAccountById(theId);
+  devDebug("loader() in AccountById Page", function () {
+    console.log(data);
+  })
+  return data
 }

@@ -1,15 +1,14 @@
 import { useEffect } from "react";
 import { useLoaderData, useNavigate } from "react-router";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { formatCurrency, useShortcut } from "../../utils/utils";
 import { fetchLedgersAsGroup } from "../../services/apiLedger";
-import { LedgerType, searchLedgerDescription } from "../../store/ledgerStore";
+import { LedgerType, useSearch } from "../../store/ledgerStore";
 
 
 function LedgerGroup() {
     const groupOfLedger = useLoaderData<{ [date: string]: LedgerType[] }>()
-    const serachLedger = useAtomValue(searchLedgerDescription)
+    const searchLedger = useSearch().searchText
 
     return (
         <div>
@@ -17,7 +16,7 @@ function LedgerGroup() {
                 <SearchBar></SearchBar>
                 <div className="flex flex-col items-center">
                     {Object.entries(groupOfLedger).length > 0 ? Object.entries(groupOfLedger)?.map(([key, ledgerByDate]: [string, LedgerType[]]) => {
-                        const filteredLedger: LedgerType[] = ledgerByDate.filter((x) => x.description ? x.description.toLowerCase().includes(serachLedger.toLowerCase()) : null)
+                        const filteredLedger: LedgerType[] = ledgerByDate.filter((x) => x.description ? x.description.toLowerCase().includes(searchLedger.toLowerCase()) : null)
                         const totalSummary: TotalBalance = {
                             totalCredit: filteredLedger.reduce((accumulate, current) => accumulate += current.credit_amount, 0),
                             totalDebit: filteredLedger.reduce((accumulate, current) => accumulate += current.debit_amount, 0)
@@ -105,7 +104,7 @@ function AddButton() {
 }
 
 function SearchBar() {
-    const setSearchLedger = useSetAtom(searchLedgerDescription);
+    const setSearchLedger = useSearch((state) => state.setSearchText)
 
     function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
         setSearchLedger(e.target.value)
@@ -123,7 +122,6 @@ function FoundRow({ ledger }: { ledger: LedgerType }) {
     const navigate = useNavigate();
 
     function onClickDateHandler(theId: number) {
-        console.log(theId);
         navigate(`/ledger/${theId}`)
     }
 

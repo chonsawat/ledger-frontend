@@ -1,9 +1,8 @@
-import React, { HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute, useEffect, useState } from "react"
-import { redirect, useLoaderData, useNavigate } from "react-router"
+import React, { useEffect, useState } from "react"
+import { useLoaderData, useNavigate } from "react-router"
 import { Form } from "react-router-dom"
-import { atom, useAtom, useAtomValue } from "jotai"
 
-import { newLedgerDetail, newLedgerDetailAccountSelected } from "../../store/ledgerStore"
+import { useNewLedger } from "../../store/ledgerStore"
 import { addLedger } from "../../services/apiLedger"
 import { AccountType } from "../Account/Account"
 import { LedgerType } from "../../store/ledgerStore"
@@ -74,16 +73,17 @@ function LedgerAdding() {
 
 function CreditAccountDropDown() {
     const accounts = useLoaderData()
-    const [newLedgerDetailAccounts, setDetailAccounts] = useAtom(newLedgerDetailAccountSelected)
+    const credit_account: number = useNewLedger().credit_account
+    const setCreditAccounts = useNewLedger().setCreditAccount
 
     function handleAccountChangeCredit(e: React.ChangeEvent<HTMLSelectElement>) {
-        setDetailAccounts({ ...newLedgerDetailAccounts, credit_account: Number(e.target.value) })
+        setCreditAccounts(Number(e.target.value))
     }
 
     return (
         <div className="flex my-2 mx-2">
             <label htmlFor="credit_account" className='mr-2'>Credit Account: </label>
-            <select name="credit_account" id="credit_account" value={newLedgerDetailAccounts.credit_account} onChange={handleAccountChangeCredit} className="border rounded-sm">
+            <select name="credit_account" id="credit_account" value={credit_account} onChange={handleAccountChangeCredit} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
                 {accounts.map((account: AccountType) => (
                     <option key={account.id} value={account.id}>
@@ -97,16 +97,17 @@ function CreditAccountDropDown() {
 
 function DebitAccountDropDown() {
     const accounts = useLoaderData()
-    const [newLedgerDetailAccounts, setDetailAccounts] = useAtom(newLedgerDetailAccountSelected)
+    const debit_account: number = useNewLedger().debit_account
+    const setDebitAccounts = useNewLedger().setDebitAccount
 
     function handleAccountChangeDebit(e: React.ChangeEvent<HTMLSelectElement>) {
-        setDetailAccounts({ ...newLedgerDetailAccounts, debit_account: Number(e.target.value) })
+        setDebitAccounts(Number(e.target.value))
     }
 
     return (
         <div className="flex my-2 mx-2">
             <label htmlFor="debit_account" className='mr-2'>Debit Account: </label>
-            <select name="debit_account" id="debit_account" value={newLedgerDetailAccounts.debit_account} onChange={handleAccountChangeDebit} className="border rounded-sm">
+            <select name="debit_account" id="debit_account" value={debit_account} onChange={handleAccountChangeDebit} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
                 {accounts.map((account: AccountType) => (
                     <option key={account.id} value={account.id}>

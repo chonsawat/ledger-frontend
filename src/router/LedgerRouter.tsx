@@ -7,9 +7,10 @@ import { action as deleteAccountById } from "../pages/Ledger/LedgerById";
 import LedgerGroup from "../pages/Ledger/LedgerGroup";
 import LedgerUpdate from "../pages/Ledger/LedgerUpdate";
 import { loader as fetchLedgerUpdate } from "../pages/Ledger/LedgerUpdate";
+import { action as updateLedger } from "../pages/Ledger/LedgerUpdate";
 
 import { fetchAccounts } from "../services/apiAccounts";
-import { fetchLedgers, fetchLedgersAsGroup, updateLedger } from "../services/apiLedger";
+import { fetchLedgers, fetchLedgersAsGroup } from "../services/apiLedger";
 import { LedgerType } from "../store/ledgerStore";
 
 export default [

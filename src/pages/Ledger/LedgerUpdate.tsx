@@ -1,10 +1,10 @@
-import { Form, redirect, useLoaderData, useLocation, useNavigate } from "react-router"
+import { Form, useLoaderData, useNavigate } from "react-router"
 import { ChangeEvent, useEffect, useState } from "react"
 import { fetchLedgerById, updateLedger } from "../../services/apiLedger"
 import { fetchAccounts } from "../../services/apiAccounts"
 import { AccountType } from "../Account/Account"
-import { LedgerType, LedgerUpdateType, newLedgerDetailAccountSelected, newLedgerDetailAccountSelectedType } from "../../store/ledgerStore"
-import { useAtom } from "jotai"
+import { LedgerType, LedgerUpdateType, useNewLedger, newLedgerDetailAccountSelectedType } from "../../store/ledgerStore"
+import { devDebug } from "../../utils/utils"
 
 function LedgerUpdate() {
     const [theLedger, setTheLedger] = useState<LedgerUpdateType>()
@@ -59,16 +59,25 @@ function AccountDropDown({ mode }: { mode: string }) {
     const { accounts } = useLoaderData<{ accounts: AccountType[] }>()
     const name = mode === "credit" ? "credit_account" : "debit_account"
     const description = mode === "credit" ? "Credit Account" : "Debit Account"
-    const [newLedgerDetailAccounts, setDetailAccounts] = useAtom<newLedgerDetailAccountSelectedType>(newLedgerDetailAccountSelected)
+    const newAccounts: newLedgerDetailAccountSelectedType = {
+        credit_account: useNewLedger().credit_account,
+        debit_account: useNewLedger().debit_account
+    }
+    const setCreditAccount = useNewLedger().setCreditAccount
+    const setDebitAccount = useNewLedger().setDebitAccount
 
     function handleAccountChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        setDetailAccounts({ ...newLedgerDetailAccounts, [name]: Number(e.target.value) })
+        if (mode === "credit") {
+            setCreditAccount(Number(e.target.value))
+        } else {
+            setDebitAccount(Number(e.target.value))
+        }
     }
 
     return (
         <div className={`flex my-2 mx-2`}>
             <label htmlFor={name} className='mr-2'>{description}: </label>
-            <select name={name} id={name} defaultValue={newLedgerDetailAccounts[name]} onChange={handleAccountChange} className="border rounded-sm">
+            <select name={name} id={name} defaultValue={newAccounts[name]} onChange={handleAccountChange} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
                 {accounts.map((account: AccountType) => (
                     <option key={account.id} value={account.id}>
@@ -92,6 +101,9 @@ function ButtonSubmit() {
 }
 
 export async function loader({ params: { theId } }: { params: { theId: number } }) {
+    devDebug("loader() in LedgerUpdate", function () {
+        console.log(theId);
+    })
     const ledgerFetched = await fetchLedgerById(theId);
     const accountFetched = await fetchAccounts();
     return {
@@ -100,7 +112,11 @@ export async function loader({ params: { theId } }: { params: { theId: number } 
     }
 }
 
+// TODO: Fix error on update api
 export async function action({ params, request }: { params: any, request: any }) {
+    devDebug("action() in LedgerUpdate", function () {
+        console.log(params);
+    })
 
     const today = new Date();
     const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`; // Format: "YYYY-MM-DD"

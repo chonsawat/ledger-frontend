@@ -1,4 +1,4 @@
-import { atom } from "jotai"
+import { create, StoreApi, UseBoundStore } from 'zustand'
 
 export type LedgerType = {
   id: number | undefined,
@@ -32,16 +32,25 @@ export type LedgerUpdateType = {
   debit_amount?: number
 }
 
-export const newLedgerDetail = atom({})
 export type newLedgerDetailAccountSelectedType = {
   credit_account: number, debit_account: number
 }
-export const newLedgerDetailAccountSelected = atom<newLedgerDetailAccountSelectedType>({
+export type newLedgerDetailAccountSelectedTypeStore = newLedgerDetailAccountSelectedType & {
+  setCreditAccount: (newValue: number) => void,
+  setDebitAccount: (newValue: number) => void
+}
+export const useNewLedger = create<newLedgerDetailAccountSelectedTypeStore>((set) => ({
   credit_account: 0,
   debit_account: 0,
-})
-export const newSelect = atom((get) => {
-  return newLedgerDetailAccountSelected
-},
-)
-export const searchLedgerDescription = atom<string>("");
+  setCreditAccount: (newValue: number) => set({ credit_account: newValue }),
+  setDebitAccount: (newValue: number) => set({ debit_account: newValue })
+}))
+
+export type UseSearchType = {
+  searchText: string,
+  setSearchText: (text: string) => void
+}
+export const useSearch = create<UseSearchType>((set) => ({
+  searchText: "",
+  setSearchText: (newText: string) => set({ searchText: newText })
+}))
