@@ -2,7 +2,7 @@ import { formatCurrency, useShortcut } from "../../utils/utils";
 import { fetchLedgers } from "../../services/apiLedger";
 import { redirect, useLoaderData, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
-import { LedgerType } from "../../store/ledger";
+import { LedgerType } from "../../store/ledgerStore";
 
 function Ledger() {
     const theLedger = useLoaderData()
@@ -84,7 +84,7 @@ function FoundRow({ ledger }: { ledger: LedgerType }) {
     const navigate = useNavigate()
     
     function onClickDateHandler(theId: number) {
-        navigate(`/ledger/${theId}`)
+        // navigate(`/ledger/${theId}`)
     }
 
     function onClickUpdateHandler(theId: number) {

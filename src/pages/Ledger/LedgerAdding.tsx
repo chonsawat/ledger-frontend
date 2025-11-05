@@ -3,10 +3,10 @@ import { redirect, useLoaderData, useNavigate } from "react-router"
 import { Form } from "react-router-dom"
 import { atom, useAtom, useAtomValue } from "jotai"
 
-import { newLedgerDetail, newLedgerDetailAccountSelected } from "../../store/ledger"
+import { newLedgerDetail, newLedgerDetailAccountSelected } from "../../store/ledgerStore"
 import { addLedger } from "../../services/apiLedger"
 import { AccountType } from "../Account/Account"
-import { LedgerType } from "../../store/ledger"
+import { LedgerType } from "../../store/ledgerStore"
 import { useShortcut } from "../../utils/utils"
 
 function LedgerAdding() {

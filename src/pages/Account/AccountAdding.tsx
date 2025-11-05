@@ -1,7 +1,7 @@
-function AccountAdding() {
+function AccountAddPage() {
     return (
         <div>Account Adding</div>
     )
 }
 
-export default AccountAdding
+export default AccountAddPage

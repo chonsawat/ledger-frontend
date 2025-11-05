@@ -1,15 +1,14 @@
 import { useEffect } from 'react'
 
 export function formatCurrency(currency: number) {
-    let num = Number(currency).toLocaleString('th', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    return "฿ " + num;
+  let num = Number(currency).toLocaleString('th', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return "฿ " + num;
 }
 
 
-export const useShortcut = (shortcut: string, callback: (event: {key:string}) => void) => {
-  const handleKeyDown = (event: {key:string}) => {
-    console.log(event.key);
-    
+export const useShortcut = (shortcut: string, callback: (event: { key: string }) => void) => {
+  const handleKeyDown = (event: { key: string }) => {
+
     // Single key shortcuts (e.g. pressing a)
     if (shortcut === event.key) {
       return callback(event)
@@ -23,4 +22,12 @@ export const useShortcut = (shortcut: string, callback: (event: {key:string}) =>
       window.removeEventListener('keydown', handleKeyDown)
     }
   })
+}
+
+export const devDebug = (name: string, func: () => void) => {
+  if (import.meta.env.DEV && Boolean(import.meta.env.VITE_IS_DEVELOP) === true) {
+    console.group(name);
+    func()
+    console.groupEnd();
+  }
 }

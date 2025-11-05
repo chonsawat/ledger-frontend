@@ -4,7 +4,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { formatCurrency, useShortcut } from "../../utils/utils";
 import { fetchLedgersAsGroup } from "../../services/apiLedger";
-import { LedgerType, searchLedgerDescription } from "../../store/ledger";
+import { LedgerType, searchLedgerDescription } from "../../store/ledgerStore";
 
 
 function LedgerGroup() {
@@ -123,6 +123,7 @@ function FoundRow({ ledger }: { ledger: LedgerType }) {
     const navigate = useNavigate();
 
     function onClickDateHandler(theId: number) {
+        console.log(theId);
         navigate(`/ledger/${theId}`)
     }
 

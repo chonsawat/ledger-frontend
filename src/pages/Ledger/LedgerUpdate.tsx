@@ -3,10 +3,9 @@ import { ChangeEvent, useEffect, useState } from "react"
 import { fetchLedgerById, updateLedger } from "../../services/apiLedger"
 import { fetchAccounts } from "../../services/apiAccounts"
 import { AccountType } from "../Account/Account"
-import { LedgerType, LedgerUpdateType, newLedgerDetailAccountSelected, newLedgerDetailAccountSelectedType } from "../../store/ledger"
+import { LedgerType, LedgerUpdateType, newLedgerDetailAccountSelected, newLedgerDetailAccountSelectedType } from "../../store/ledgerStore"
 import { useAtom } from "jotai"
 
-// TODO: Update this to api
 function LedgerUpdate() {
     const [theLedger, setTheLedger] = useState<LedgerUpdateType>()
     const { ledger, accounts } = useLoaderData<{ ledger: LedgerType, accounts: AccountType }>()

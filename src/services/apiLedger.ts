@@ -1,4 +1,5 @@
-import { LedgerType } from "../store/ledger";
+import { LedgerType } from "../store/ledgerStore";
+import { devDebug } from "../utils/utils";
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -21,11 +22,18 @@ export async function fetchLedgersAsGroup() {
 }
 
 export async function fetchLedgerById(theId: number) {
+  devDebug("fetchLedgerById", function () {
+    console.log(`theId: ${theId}`);
+  })
+
   const res = await fetch(`${API_URL}/api/ledger/${theId}`)
 
   if (!res.ok) throw Error("Fail to fetch data")
 
   const data = await res.json();
+  devDebug("fetchLedgerById: data", function() {
+    console.log(data);
+  })
   return data
 }
 
