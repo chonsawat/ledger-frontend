@@ -1,12 +1,13 @@
 import React, { HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute, useEffect, useState } from "react"
 import { redirect, useLoaderData, useNavigate } from "react-router"
 import { Form } from "react-router-dom"
-import { useAtom, useAtomValue } from "jotai"
+import { atom, useAtom, useAtomValue } from "jotai"
 
 import { newLedgerDetail, newLedgerDetailAccountSelected } from "../../store/ledger"
 import { addLedger } from "../../services/apiLedger"
 import { AccountType } from "../Account/Account"
-import { LedgerType } from "../../store/ledger" 
+import { LedgerType } from "../../store/ledger"
+import { useShortcut } from "../../utils/utils"
 
 function LedgerAdding() {
     const navigate = useNavigate()
@@ -19,12 +20,16 @@ function LedgerAdding() {
         setSelectedDate(formattedDate)
     }, [])
 
+    useShortcut('Escape', () => {
+        navigate(-1)
+    })
+
     return (
         <div className="my-5">
             <Form method="POST" className="border rounded-xl ml-2 mr-4">
                 <div className="flex my-2 mx-2 mt-5">
                     <p className="mr-2">Date: </p>
-                    <input name="date" type="text" placeholder="Date" className="border rounded-sm" defaultValue={selectedDate}/>
+                    <input name="date" type="text" placeholder="Date" className="border rounded-sm" defaultValue={selectedDate} />
                     <br />
                 </div>
                 <div className="flex my-2 mx-2">
@@ -56,7 +61,7 @@ function LedgerAdding() {
                 </div>   */}
                 <div className="mb-3 mx-3">
                     <button className="hover:cursor-pointer hover:bg-lime-700 rounded-xl bg-lime-500 text-white px-5 py-1" type="submit">Add</button>
-                    <a className="hover:cursor-pointer hover:bg-red-700 rounded-xl bg-red-500 text-white px-5 py-1.25 ml-2" onClick={() => {navigate(-1)}}>Back</a>
+                    <a className="hover:cursor-pointer hover:bg-red-700 rounded-xl bg-red-500 text-white px-5 py-1.25 ml-2" onClick={() => { navigate(-1) }}>Back</a>
                 </div>
 
                 <div className="hidden">
@@ -72,18 +77,18 @@ function CreditAccountDropDown() {
     const [newLedgerDetailAccounts, setDetailAccounts] = useAtom(newLedgerDetailAccountSelected)
 
     function handleAccountChangeCredit(e: React.ChangeEvent<HTMLSelectElement>) {
-        setDetailAccounts({...newLedgerDetailAccounts, creditAccount: Number(e.target.value)})
+        setDetailAccounts({ ...newLedgerDetailAccounts, credit_account: Number(e.target.value) })
     }
 
     return (
         <div className="flex my-2 mx-2">
             <label htmlFor="credit_account" className='mr-2'>Credit Account: </label>
-            <select name="credit_account" id="credit_account" value={newLedgerDetailAccounts.creditAccount} onChange={handleAccountChangeCredit} className="border rounded-sm">
+            <select name="credit_account" id="credit_account" value={newLedgerDetailAccounts.credit_account} onChange={handleAccountChangeCredit} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
                 {accounts.map((account: AccountType) => (
-                <option key={account.id} value={account.id}>
-                    {account.id} : {account.desc}
-                </option>
+                    <option key={account.id} value={account.id}>
+                        {account.id} : {account.desc}
+                    </option>
                 ))}
             </select>
         </div>
@@ -95,35 +100,33 @@ function DebitAccountDropDown() {
     const [newLedgerDetailAccounts, setDetailAccounts] = useAtom(newLedgerDetailAccountSelected)
 
     function handleAccountChangeDebit(e: React.ChangeEvent<HTMLSelectElement>) {
-        setDetailAccounts({...newLedgerDetailAccounts, debitAccount: Number(e.target.value)})
+        setDetailAccounts({ ...newLedgerDetailAccounts, debit_account: Number(e.target.value) })
     }
 
     return (
         <div className="flex my-2 mx-2">
             <label htmlFor="debit_account" className='mr-2'>Debit Account: </label>
-            <select name="debit_account" id="debit_account" value={newLedgerDetailAccounts.debitAccount} onChange={handleAccountChangeDebit} className="border rounded-sm">
+            <select name="debit_account" id="debit_account" value={newLedgerDetailAccounts.debit_account} onChange={handleAccountChangeDebit} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
                 {accounts.map((account: AccountType) => (
-                <option key={account.id} value={account.id}>
-                    {account.id} : {account.desc}
-                </option>
+                    <option key={account.id} value={account.id}>
+                        {account.id} : {account.desc}
+                    </option>
                 ))}
             </select>
         </div>
     )
 }
 
-export async function action({request}: any) {    
-    const [newLedger, setNewLedger] = useAtom(newLedgerDetail);
-    const newLedgerDetailAccounts = useAtomValue(newLedgerDetailAccountSelected);
-
+export async function action({ request }: any) {
     const today = new Date();
     const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`; // Format: "YYYY-MM-DD"
 
     const formData = await request.formData();
-    const data = Object.fromEntries(formData) 
-    const selectedCreditData = JSON.parse(data.accounts).filter((x: AccountType) => x.id == newLedgerDetailAccounts.creditAccount)
-    const selectedDebitData = JSON.parse(data.accounts).filter((x: AccountType) => x.id == newLedgerDetailAccounts.debitAccount)
+    const data = Object.fromEntries(formData)
+
+    const selectedCreditData = JSON.parse(data.accounts).filter((x: AccountType) => x.id == data.credit_account)
+    const selectedDebitData = JSON.parse(data.accounts).filter((x: AccountType) => x.id == data.debit_account)
     const ledger: LedgerType = {
         id: undefined,
         date: data.date,
@@ -134,10 +137,9 @@ export async function action({request}: any) {
         debit_amount: data.debit_amount,
     }
 
-    setNewLedger(ledger)
-
     console.group("Create Ledger")
-    const addedLedger = await addLedger(newLedger);
+    // console.log(ledger);
+    const addedLedger = await addLedger(ledger);
     console.groupEnd()
     return window.history.back()
 }

@@ -4,7 +4,7 @@ import { fetchAccounts } from "../../services/apiAccounts"
 
 export type AccountType = {
     id: number,
-    desc: string,
+    desc?: string,
     balance: number
 }
 

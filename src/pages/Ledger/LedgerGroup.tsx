@@ -19,8 +19,8 @@ function LedgerGroup() {
                     {Object.entries(groupOfLedger).length > 0 ? Object.entries(groupOfLedger)?.map(([key, ledgerByDate]: [string, LedgerType[]]) => {
                         const filteredLedger: LedgerType[] = ledgerByDate.filter((x) => x.description ? x.description.toLowerCase().includes(serachLedger.toLowerCase()) : null)
                         const totalSummary: TotalBalance = {
-                            totalCredit: ledgerByDate.reduce((accumulate, current) => accumulate += current.credit_amount, 0),
-                            totalDebit: ledgerByDate.reduce((accumulate, current) => accumulate += current.debit_amount, 0)
+                            totalCredit: filteredLedger.reduce((accumulate, current) => accumulate += current.credit_amount, 0),
+                            totalDebit: filteredLedger.reduce((accumulate, current) => accumulate += current.debit_amount, 0)
                         }
 
                         if (filteredLedger.length > 0) {

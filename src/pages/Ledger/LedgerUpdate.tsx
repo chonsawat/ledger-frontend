@@ -1,18 +1,21 @@
 import { Form, redirect, useLoaderData, useLocation, useNavigate } from "react-router"
-import { useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { fetchLedgerById, updateLedger } from "../../services/apiLedger"
 import { fetchAccounts } from "../../services/apiAccounts"
+import { AccountType } from "../Account/Account"
+import { LedgerType, LedgerUpdateType, newLedgerDetailAccountSelected, newLedgerDetailAccountSelectedType } from "../../store/ledger"
+import { useAtom } from "jotai"
 
 // TODO: Update this to api
 function LedgerUpdate() {
-    const [theLedger, setTheLedger] = useState({})
-    const { ledger, accounts } = useLoaderData()
+    const [theLedger, setTheLedger] = useState<LedgerUpdateType>()
+    const { ledger, accounts } = useLoaderData<{ ledger: LedgerType, accounts: AccountType }>()
 
     useEffect(() => {
         setTheLedger(ledger)
     }, [])
 
-    function onChangeLedger(e, fieldName) {
+    function onChangeLedger(e: ChangeEvent<HTMLInputElement>, fieldName: string) {
 
         let value = e.target.value
         if (value.split(' ')[0] === '฿') {
@@ -20,19 +23,19 @@ function LedgerUpdate() {
         }
 
         setTheLedger((prev) => (
-            { ...prev, [fieldName]: value }
+            { ...prev, id: prev?.id, [fieldName]: value }
         ))
     }
 
     return (
         <div className="my-5">
             <Form action="" method="POST" className="border rounded-xl ml-2 mr-4">
-                <DataRow name="Date" inputName="date" value={theLedger.date} ></DataRow>
-                <DataRow name="Description" inputName="description" value={theLedger.description} onChangeFn={(e) => onChangeLedger(e, "description")}></DataRow>
-                <AccountDropDown data={accounts} inputName="credit_account" mode="credit" selected={ledger.credit_account?.id}></AccountDropDown>
-                <DataRow name="Credit Amount" inputName="credit_amount" value={theLedger.credit_amount} onChangeFn={(e) => onChangeLedger(e, "credit_amount")}></DataRow>
-                <AccountDropDown data={accounts} inputName="debit_account" mode="debit" selected={ledger.debit_account?.id}></AccountDropDown>
-                <DataRow name="Debit Amount" inputName="debit_amount" value={theLedger.debit_amount} onChangeFn={(e) => onChangeLedger(e, "debit_amount")}></DataRow>
+                <DataRow name="Date" inputName="date" value={theLedger?.date} ></DataRow>
+                <DataRow name="Description" inputName="description" value={theLedger?.description} onChangeFn={(e: ChangeEvent<HTMLInputElement>) => onChangeLedger(e, "description")}></DataRow>
+                <AccountDropDown mode="credit"></AccountDropDown>
+                <DataRow name="Credit Amount" inputName="credit_amount" value={theLedger?.credit_amount} onChangeFn={(e: ChangeEvent<HTMLInputElement>) => onChangeLedger(e, "credit_amount")}></DataRow>
+                <AccountDropDown mode="debit"></AccountDropDown>
+                <DataRow name="Debit Amount" inputName="debit_amount" value={theLedger?.debit_amount} onChangeFn={(e: ChangeEvent<HTMLInputElement>) => onChangeLedger(e, "debit_amount")}></DataRow>
                 <ButtonSubmit></ButtonSubmit>
                 <div className="hidden">
                     <input type="hidden" name="accounts" value={JSON.stringify(accounts)} />
@@ -42,7 +45,7 @@ function LedgerUpdate() {
     )
 }
 
-type DataRowType = { name: string, value: string, onChangeFn: () => {}, inputName: string }
+type DataRowType = { name: string, value: string | number | undefined, onChangeFn?: (e: ChangeEvent<HTMLInputElement>) => void, inputName: string }
 function DataRow({ name, value, onChangeFn, inputName }: DataRowType) {
     return (
         <div className="flex my-2 mx-2">
@@ -53,15 +56,22 @@ function DataRow({ name, value, onChangeFn, inputName }: DataRowType) {
     )
 }
 
-function AccountDropDown({ data, selected, onChangeFn, mode }) {
+function AccountDropDown({ mode }: { mode: string }) {
+    const { accounts } = useLoaderData<{ accounts: AccountType[] }>()
     const name = mode === "credit" ? "credit_account" : "debit_account"
     const description = mode === "credit" ? "Credit Account" : "Debit Account"
+    const [newLedgerDetailAccounts, setDetailAccounts] = useAtom<newLedgerDetailAccountSelectedType>(newLedgerDetailAccountSelected)
+
+    function handleAccountChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        setDetailAccounts({ ...newLedgerDetailAccounts, [name]: Number(e.target.value) })
+    }
+
     return (
         <div className={`flex my-2 mx-2`}>
             <label htmlFor={name} className='mr-2'>{description}: </label>
-            <select name={name} id={name} defaultValue={selected} onChange={onChangeFn} className="border rounded-sm">
+            <select name={name} id={name} defaultValue={newLedgerDetailAccounts[name]} onChange={handleAccountChange} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
-                {data.map((account) => (
+                {accounts.map((account: AccountType) => (
                     <option key={account.id} value={account.id}>
                         {account.id} : {account.desc}
                     </option>
@@ -82,7 +92,7 @@ function ButtonSubmit() {
     )
 }
 
-export async function loader({ params: { theId } }) {
+export async function loader({ params: { theId } }: { params: { theId: number } }) {
     const ledgerFetched = await fetchLedgerById(theId);
     const accountFetched = await fetchAccounts();
     return {
@@ -91,15 +101,15 @@ export async function loader({ params: { theId } }) {
     }
 }
 
-export async function action({ params, request }: { params: unknown, request: unknown }) {
+export async function action({ params, request }: { params: any, request: any }) {
 
     const today = new Date();
     const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`; // Format: "YYYY-MM-DD"
 
     const formData = await request.formData();
     const data = Object.fromEntries(formData)
-    const selectedCreditData = JSON.parse(data.accounts).filter((x) => x.id == credit_account.value)
-    const selectedDebitData = JSON.parse(data.accounts).filter((x) => x.id == debit_account.value)
+    const selectedCreditData = JSON.parse(data.accounts).filter((x: AccountType) => x.id == data.credit_account)
+    const selectedDebitData = JSON.parse(data.accounts).filter((x: AccountType) => x.id == data.debit_account)
     const ledger = {
         id: params.theId,
         date: data.date,
