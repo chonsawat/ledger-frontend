@@ -5,10 +5,10 @@ Stack: React + Vite + Bun
 - [ ] Account Delete
 - [ ] Account Update
 - [ ] Account Add
-- [ ] Account Detail
+- [x] Account Detail
 - [x] Account Listing
-- [ ] Ledger Delete
-- [ ] Ledger Update
+- [x] Ledger Delete
+- [x] Ledger Update
 - [x] Ledger Add
 - [x] Ledger Detail
 - [x] Ledger Listing
