@@ -10,6 +10,7 @@ function LedgerGroup() {
     const groupOfLedger = useLoaderData<{ [date: string]: LedgerType[] }>()
     const searchLedger = useSearch().searchText
 
+    // TODO: Fix logic move it into useLedgerGroup in store
     return (
         <div>
             <div className="table-ledger-content my-5 mx-5">

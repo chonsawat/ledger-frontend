@@ -5,7 +5,6 @@ export function formatCurrency(currency: number) {
   return "฿ " + num;
 }
 
-
 export const useShortcut = (shortcut: string, callback: (event: { key: string }) => void) => {
   const handleKeyDown = (event: { key: string }) => {
 
