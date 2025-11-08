@@ -2,7 +2,6 @@ import { updateLedger } from "../../services/apiLedger";
 import { devDebug } from "../../utils/utils";
 import { AccountType } from "../Account/Account";
 
-// TODO: Fix error on update api
 export async function useUpdateLedger({
   params,
   request,
