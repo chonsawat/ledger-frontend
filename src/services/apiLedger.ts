@@ -66,10 +66,6 @@ export async function addLedger(newLedger: unknown) {
 
 export async function updateLedger(newLedger: LedgerType) {
   try {
-    devDebug("updateLedger - API", function () {
-      console.log(newLedger);
-    })
-
     const res = await fetch(`${API_URL}/api/ledger`, {
       method: "PATCH",
       body: JSON.stringify(newLedger),
@@ -85,6 +81,9 @@ export async function updateLedger(newLedger: LedgerType) {
       throw Error();
     }
     const { data } = await res.json();
+    devDebug("updateLedger - API", function () {
+      console.log(data);
+    })
     return data
   } catch {
     throw Error("Failed creating you order");

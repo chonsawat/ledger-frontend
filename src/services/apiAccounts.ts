@@ -9,6 +9,9 @@ export async function fetchAccounts(): Promise<AccountType[]> {
   if (!res.ok) throw Error("Fail to fetch data")
 
   const data = await res.json();
+  devDebug('fetchAccounts - API', () => {
+    console.log(data);
+  })
   return data
 }
 

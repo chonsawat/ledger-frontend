@@ -1,3 +1,4 @@
+import { updateLedger } from "../../services/apiLedger";
 import { devDebug } from "../../utils/utils";
 import { AccountType } from "../Account/Account";
 
@@ -9,9 +10,6 @@ export async function useUpdateLedger({
   params: any;
   request: any;
 }) {
-  devDebug("useUpdateLedger", function () {
-    console.log(params);
-  });
 
   const today = new Date();
   const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`; // Format: "YYYY-MM-DD"
@@ -37,5 +35,12 @@ export async function useUpdateLedger({
     credit_amount: data.credit_amount,
     debit_amount: data.debit_amount,
   };
+
+  let updatedLedger = await updateLedger(ledger);
+  devDebug("useUpdateLedger", function () {
+    console.log(params);
+    console.log(ledger);
+  });
+
   return window.history.back();
 }
