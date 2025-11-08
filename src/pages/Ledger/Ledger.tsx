@@ -124,9 +124,4 @@ function NotFoundRow() {
     )
 }
 
-export async function loader() {
-    const data = await fetchLedgers()
-    return data
-}
-
 export default Ledger

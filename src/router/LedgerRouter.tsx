@@ -1,22 +1,24 @@
 import Ledger from "../pages/Ledger/Ledger";
 import LedgerAdding from "../pages/Ledger/LedgerAdding";
-import { action as addLedger } from "../pages/Ledger/LedgerAdding";
 import LedgerById from "../pages/Ledger/LedgerById";
-import { loader as fetchLedgerById } from "../pages/Ledger/LedgerById";
-import { action as deleteAccountById } from "../pages/Ledger/LedgerById";
 import LedgerGroup from "../pages/Ledger/LedgerGroup";
 import LedgerUpdate from "../pages/Ledger/LedgerUpdate";
-import { loader as fetchLedgerUpdate } from "../pages/Ledger/LedgerUpdate";
-import { action as updateLedger } from "../pages/Ledger/LedgerUpdate";
 
-import { fetchAccounts } from "../services/apiAccounts";
-import { fetchLedgers, fetchLedgersAsGroup } from "../services/apiLedger";
+import { useCreateLedger } from "../pages/Ledger/useCreateLedger";
+import { useDeleteLedgerById } from "../pages/Ledger/useDeleteLedger";
+import { useFetchLedgerById } from "../pages/Ledger/useFetchLedgerId";
+import { usefetchAccounts } from "../pages/Account/useFetchAccounts";
+import { useFetchLedgerAsGroup } from "../pages/Ledger/useFetchLedgersAsGroup";
+import { useUpdateLedger } from "../pages/Ledger/useUpdateLedger";
+import { useFetchLedger } from "../pages/Ledger/useFetchLedger";
+import { useFetchForUpdateLedger } from "../pages/Ledger/useFetchForUpdateLedger";
+
 import { LedgerType } from "../store/ledgerStore";
 
 export default [
-  { path: "/ledger", element: <Ledger></Ledger>, loader: fetchLedgers },
-  { path: "/ledger/groupByDate", element: <LedgerGroup></LedgerGroup>, loader: fetchLedgersAsGroup },
-  { path: "/ledger/add", element: <LedgerAdding></LedgerAdding>, loader: fetchAccounts, action: (e: LedgerType) => addLedger(e) },
-  { path: "/ledger/update/:theId", element: <LedgerUpdate></LedgerUpdate>, loader: fetchLedgerUpdate as any, action: updateLedger },
-  { path: "/ledger/:theId", element: <LedgerById></LedgerById>, loader: fetchLedgerById as any, action: deleteAccountById },
+  { path: "/ledger", element: <Ledger></Ledger>, loader: useFetchLedger },
+  { path: "/ledger/groupByDate", element: <LedgerGroup></LedgerGroup>, loader: useFetchLedgerAsGroup },
+  { path: "/ledger/add", element: <LedgerAdding></LedgerAdding>, loader: usefetchAccounts, action: (e: LedgerType) => useCreateLedger(e) },
+  { path: "/ledger/update/:theId", element: <LedgerUpdate></LedgerUpdate>, loader: useFetchForUpdateLedger as any, action: useUpdateLedger },
+  { path: "/ledger/:theId", element: <LedgerById></LedgerById>, loader: useFetchLedgerById as any, action: useDeleteLedgerById },
 ]

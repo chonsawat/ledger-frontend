@@ -1,6 +1,6 @@
 import React from 'react'
 import { fetchAccountById } from '../../services/apiAccounts';
-import { useLoaderData } from 'react-router';
+import { Params, useLoaderData } from 'react-router';
 import { devDebug, formatCurrency } from '../../utils/utils';
 
 export default function AccountById() {
@@ -15,12 +15,4 @@ export default function AccountById() {
       <p>UpdateDate: {theAccount.updateDate}</p>
     </div>
   )
-}
-
-export async function loader({ params: { theId } }: { params: { theId: number } }) {
-  const data = await fetchAccountById(theId);
-  devDebug("loader() in AccountById Page", function () {
-    console.log(data);
-  })
-  return data
 }

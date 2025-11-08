@@ -39,9 +39,9 @@ export async function fetchLedgerById(theId: number) {
 
 export async function addLedger(newLedger: unknown) {
   try {
-    console.group("addLedger");
-    console.log(newLedger);
-    console.groupEnd();
+    devDebug("addLedger - API", function() {
+      console.log(newLedger);
+    })
 
     const res = await fetch(`${API_URL}/api/ledger`, {
       method: "POST",

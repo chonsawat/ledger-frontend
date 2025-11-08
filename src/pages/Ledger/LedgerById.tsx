@@ -70,20 +70,4 @@ function ButtonSubmit() {
     )
 }
 
-export async function loader({ params: { theId } }: { params: { theId: number } }) {
-    const data = await fetchLedgerById(theId);
-    return data
-}
-
-export async function action({ params }: ActionFunctionArgs) {
-    const ledger = {
-        id: Number(params.theId)
-    }
-    console.group("Delete Ledger")
-
-    const deletedLedger = await deleteLedger((ledger));
-    console.groupEnd()
-    return window.history.back();
-}
-
 export default LedgerById
