@@ -16,11 +16,3 @@ export default function AccountById() {
     </div>
   )
 }
-
-export async function loader({ params }: { params: Params<string> }) {
-  const data = await fetchAccountById(Number(params.theId));
-  devDebug("loader() in AccountById Page", function () {
-    console.log(data);
-  })
-  return data
-}

@@ -6,7 +6,13 @@ import MainRouter from "./router/MainRouter"
 import './App.css'
 
 const router = createBrowserRouter(MainRouter)
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000
+    }
+  }
+})
 
 function App() {
   return (

@@ -1,6 +1,10 @@
 import { formatCurrency } from "../../utils/utils"
-import { useLoaderData, useNavigate } from "react-router"
-import { fetchAccounts } from "../../services/apiAccounts"
+import { useNavigate } from "react-router"
+import { useQuery } from "@tanstack/react-query"
+import { usefetchAccounts } from "./useFetchAccounts"
+import Loading from "../Loading/Loading"
+import { useAccounts } from "../../store/accountStore"
+import { useEffect } from "react"
 
 export type AccountType = {
     id: number,
@@ -9,6 +13,18 @@ export type AccountType = {
 }
 
 function Accounts() {
+    const { data, isLoading } = useQuery<AccountType[]>({
+        queryKey: ["accounts"],
+        queryFn: usefetchAccounts,
+    });
+    const setAccounts = useAccounts((state) => state.setAccounts)
+
+    useEffect(() => {
+        setAccounts(data!)
+    }, [data])
+
+    if (isLoading) return <Loading></Loading>
+
     return (
         <div>
             <AccountTable></AccountTable>
@@ -45,7 +61,8 @@ function AccountHeading() {
 
 function AccountRow() {
     const navigate = useNavigate()
-    const accounts: AccountType[] = useLoaderData()
+
+    const accounts = useAccounts((state) => state.accounts)
 
     function onClickDateHandler(theId: number) {
         navigate(`/accounts/${theId}`)
@@ -53,7 +70,7 @@ function AccountRow() {
 
     return (
         <tbody>
-            {accounts.map((x) => {
+            {accounts?.map((x) => {
                 return (
                     <tr key={x.id} className="hover:text-bold hover:text-black hover:bg-gray-200">
                         <td className="p-4 border-b border-gray-200 hover:cursor-pointer" onClick={() => onClickDateHandler(x.id)}>{x.id}</td>
@@ -81,11 +98,6 @@ function AddBtn() {
             <a className="hover:cursor-pointer border rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce">Add Account</a>
         </div>
     )
-}
-
-export async function loader() {
-    const data = fetchAccounts()
-    return data
 }
 
 export default Accounts
