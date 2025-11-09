@@ -26,7 +26,6 @@ export const useShortcut = (shortcut: string, callback: (event: { key: string })
 export const devDebug = (name: string, func: () => void) => {
   const specificDate = new Date();
   const specificTimestamp = specificDate.toISOString();
-  console.log(specificTimestamp);
 
   if (import.meta.env.DEV && Boolean(import.meta.env.VITE_IS_DEVELOP) === true) {
 
