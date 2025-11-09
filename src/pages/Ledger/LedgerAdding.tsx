@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { useLoaderData, useNavigate } from "react-router"
 import { Form } from "react-router-dom"
+import { useForm, UseFormRegisterReturn } from "react-hook-form"
 
 import { useNewLedger } from "../../store/ledgerStore"
 import { AccountType } from "../Account/Account"
-import { useShortcut } from "../../utils/utils"
+import { devDebug, useShortcut } from "../../utils/utils"
+import { useCreateLedger } from "./useCreateLedger"
+import toast from "react-hot-toast"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 function LedgerAdding() {
     const navigate = useNavigate()
@@ -21,55 +25,65 @@ function LedgerAdding() {
         navigate(-1)
     })
 
+    const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm();
+
+    const queryClient = useQueryClient()
+    const { mutate: useCreateLedgerMutate } = useMutation({
+        mutationFn: useCreateLedger,
+        onSuccess: () => {
+            toast.success("Ledger successfully added");
+            queryClient.invalidateQueries({ queryKey: ["groupOfLedger"] });
+        },
+        onError: (err) => toast.error(err.message),
+    });
+
+    function onSubmitHandler(data: any) {
+        reset()
+        devDebug("[LedgerAdding] onSubmitHandler - tsx: data", () => {
+            console.log(data)
+        })
+        useCreateLedgerMutate(data)
+    }
+
     return (
         <div className="my-5">
-            <Form method="POST" className="border rounded-xl ml-2 mr-4">
+            <Form onSubmit={handleSubmit(onSubmitHandler)} method="POST" className="border rounded-xl ml-2 mr-4">
                 <div className="flex my-2 mx-2 mt-5">
                     <p className="mr-2">Date: </p>
-                    <input name="date" type="text" placeholder="Date" className="border rounded-sm" defaultValue={selectedDate} />
+                    <input type="text" placeholder="Date" className="border rounded-sm" defaultValue={selectedDate} {...register("date")} />
                     <br />
                 </div>
                 <div className="flex my-2 mx-2">
                     <p className="mr-2">Description: </p>
-                    <input name="description" type="text" placeholder="Description" className="border rounded-sm" />
+                    <input type="text" placeholder="Description" className="border rounded-sm" {...register("description")} />
                     <br />
                 </div>
-                <CreditAccountDropDown></CreditAccountDropDown>
+                <CreditAccountDropDown register={register}></CreditAccountDropDown>
                 <div className="flex my-2 mx-2">
                     <p className="mr-2">Credit Amount: </p>
-                    <input name="credit_amount" type="number" placeholder="Credit Amount" className="border rounded-sm" />
+                    <input type="number" placeholder="Credit Amount" className="border rounded-sm" {...register("credit_amount")} />
                     <br />
                 </div>
-                <DebitAccountDropDown></DebitAccountDropDown>
+                <DebitAccountDropDown register={register}></DebitAccountDropDown>
                 <div className="flex my-2 mx-2">
                     <p className="mr-2">Debit Amount: </p>
-                    <input name="debit_amount" type="number" placeholder="Debit Amount" className="border rounded-sm" />
+                    <input type="number" placeholder="Debit Amount" className="border rounded-sm" {...register("debit_amount")} />
                     <br />
                 </div>
-                {/* <div className="flex my-2 mx-2">
-                    <p className="mr-2">Total Credit Balance: </p>
-                    <input type="text" placeholder="Total Credit Balance" className="rounded-sm" disabled/>
-                    <br />
-                </div>
-                <div className="flex my-2 mx-2">
-                    <p className="mr-2">Total Debit Balance: </p>
-                    <input type="text" placeholder="Total Debit Balance" className="rounded-sm" disabled/>
-                    <br />
-                </div>   */}
                 <div className="mb-3 mx-3">
                     <button className="hover:cursor-pointer hover:bg-lime-700 rounded-xl bg-lime-500 text-white px-5 py-1" type="submit">Add</button>
                     <a className="hover:cursor-pointer hover:bg-red-700 rounded-xl bg-red-500 text-white px-5 py-1.25 ml-2" onClick={() => { navigate(-1) }}>Back</a>
                 </div>
 
                 <div className="hidden">
-                    <input type="hidden" name="accounts" value={JSON.stringify(accounts)} />
+                    <input type="hidden" value={JSON.stringify(accounts)} {...register("accounts")} />
                 </div>
             </Form>
         </div>
     )
 }
 
-function CreditAccountDropDown() {
+function CreditAccountDropDown({ register }: { register: (name: string) => UseFormRegisterReturn<string> }) {
     const accounts = useLoaderData()
     const credit_account: number = useNewLedger().credit_account
     const setCreditAccounts = useNewLedger().setCreditAccount
@@ -81,7 +95,7 @@ function CreditAccountDropDown() {
     return (
         <div className="flex my-2 mx-2">
             <label htmlFor="credit_account" className='mr-2'>Credit Account: </label>
-            <select name="credit_account" id="credit_account" value={credit_account} onChange={handleAccountChangeCredit} className="border rounded-sm">
+            <select {...register("credit_account")} id="credit_account" value={credit_account} onChange={handleAccountChangeCredit} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
                 {accounts.map((account: AccountType) => (
                     <option key={account.id} value={account.id}>
@@ -92,8 +106,8 @@ function CreditAccountDropDown() {
         </div>
     )
 }
-    
-function DebitAccountDropDown() {
+
+function DebitAccountDropDown({ register }: { register: (name: string) => UseFormRegisterReturn<string> }) {
     const accounts = useLoaderData()
     const debit_account: number = useNewLedger().debit_account
     const setDebitAccounts = useNewLedger().setDebitAccount
@@ -105,7 +119,7 @@ function DebitAccountDropDown() {
     return (
         <div className="flex my-2 mx-2">
             <label htmlFor="debit_account" className='mr-2'>Debit Account: </label>
-            <select name="debit_account" id="debit_account" value={debit_account} onChange={handleAccountChangeDebit} className="border rounded-sm">
+            <select {...register("debit_account")} id="debit_account" value={debit_account} onChange={handleAccountChangeDebit} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
                 {accounts.map((account: AccountType) => (
                     <option key={account.id} value={account.id}>

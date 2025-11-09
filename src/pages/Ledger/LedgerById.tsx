@@ -1,15 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import { deleteLedger, fetchLedgerById } from '../../services/apiLedger';
-import { ActionFunctionArgs, Form, LoaderFunctionArgs, redirect, useLoaderData, useNavigate } from 'react-router';
-import { formatCurrency } from '../../utils/utils';
+import { ActionFunctionArgs, Form, LoaderFunctionArgs, redirect, useLoaderData, useNavigate, useParams } from 'react-router';
+import { devDebug, formatCurrency } from '../../utils/utils';
+import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useDeleteLedgerById } from './useDeleteLedger';
+import toast from 'react-hot-toast';
 
 function LedgerById() {
     const ledger = useLoaderData()
     const navigate = useNavigate()
+    const params = useParams()
+
+    const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm();
+
+    const queryClient = useQueryClient()
+    const { mutate: useDeleteLedgerByIdMutate } = useMutation({
+        mutationFn: useDeleteLedgerById,
+        onSuccess: () => {
+            toast.success("Ledger successfully deleted");
+            queryClient.invalidateQueries({ queryKey: ["groupOfLedger"] });
+        },
+        onError: (err) => toast.error(err.message),
+    });
+
+    function onSubmitHandler() {
+        reset()
+        devDebug("[LedgerById] onSubmitHandler - tsx: data", () => {
+            console.log(params)
+        })
+        useDeleteLedgerByIdMutate(params)
+    }
 
     return (
         <div className='my-5'>
-            <Form method="DELETE" className="border rounded-xl ml-2 mr-4">
+            <Form onSubmit={handleSubmit(onSubmitHandler)} method="DELETE" className="border rounded-xl ml-2 mr-4">
                 <div className='px-5'>
 
                     <div className="flex my-2 mx-2 mt-5">

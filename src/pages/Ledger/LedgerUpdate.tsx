@@ -1,4 +1,4 @@
-import { Form, useLoaderData, useNavigate } from "react-router";
+import { Form, useLoaderData, useNavigate, useParams } from "react-router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { AccountType } from "../Account/Account";
 import {
@@ -7,17 +7,50 @@ import {
   useNewLedger,
   newLedgerDetailAccountSelectedType,
 } from "../../store/ledgerStore";
+import { DataType, useUpdateLedger } from "./useUpdateLedger";
+import { devDebug } from "../../utils/utils";
+import toast from "react-hot-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 
 function LedgerUpdate() {
   const [theLedger, setTheLedger] = useState<LedgerUpdateType>();
   const { ledger, accounts } = useLoaderData<{
-    ledger: LedgerType;
+    ledger: LedgerUpdateType;
     accounts: AccountType;
   }>();
+  const params = useParams();
 
   useEffect(() => {
     setTheLedger(ledger);
   }, []);
+
+  const { register, handleSubmit, reset, getValues, formState: { errors } } = useForm();
+
+  const queryClient = useQueryClient()
+  const { mutate: useUpdateLedgerMutate } = useMutation({
+    mutationFn: useUpdateLedger,
+    onSuccess: () => {
+      toast.success("Ledger successfully updated");
+      queryClient.invalidateQueries({ queryKey: ["groupOfLedger"] });
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const newAccounts: newLedgerDetailAccountSelectedType = {
+    credit_account: useNewLedger((state) => state.credit_account),
+    debit_account: useNewLedger((state) => state.debit_account),
+  };
+
+  function onSubmitHandler(request: any) {
+    let data: DataType = { ...theLedger, credit_account: newAccounts.credit_account, debit_account: newAccounts.debit_account, accounts: request.accounts }
+    reset()
+    devDebug("[LedgerUpdate] onSubmitHandler - tsx: data", () => {
+      console.log(params)
+      console.log(theLedger);
+    })
+    useUpdateLedgerMutate({ params, data })
+  }
 
   function onChangeLedger(e: ChangeEvent<HTMLInputElement>, fieldName: string) {
     let value = e.target.value;
@@ -25,13 +58,14 @@ function LedgerUpdate() {
       value = value.split(" ")[1];
     }
 
+    console.log(fieldName);
     setTheLedger((prev) => ({ ...prev, id: prev?.id, [fieldName]: value }));
   }
 
   return (
     <div className="my-5">
-      <Form action="" method="POST" className="border rounded-xl ml-2 mr-4">
-        <DataRow name="Date" inputName="date" value={theLedger?.date}></DataRow>
+      <Form onSubmit={handleSubmit(onSubmitHandler)} method="POST" className="border rounded-xl ml-2 mr-4">
+        <DataRow name="Date" inputName="date" value={theLedger?.date} onChangeFn={(e: ChangeEvent<HTMLInputElement>) => onChangeLedger(e, "date")}></DataRow>
         <DataRow
           name="Description"
           inputName="description"
@@ -40,7 +74,7 @@ function LedgerUpdate() {
             onChangeLedger(e, "description")
           }
         ></DataRow>
-        <AccountDropDown mode="credit"></AccountDropDown>
+        <AccountDropDown mode="credit" ></AccountDropDown>
         <DataRow
           name="Credit Amount"
           inputName="credit_amount"
@@ -62,8 +96,8 @@ function LedgerUpdate() {
         <div className="hidden">
           <input
             type="hidden"
-            name="accounts"
             value={JSON.stringify(accounts)}
+            {...register("accounts")}
           />
         </div>
       </Form>
@@ -119,7 +153,6 @@ function AccountDropDown({ mode }: { mode: string }) {
         {description}:{" "}
       </label>
       <select
-        name={name}
         id={name}
         defaultValue={newAccounts[name]}
         onChange={handleAccountChange}

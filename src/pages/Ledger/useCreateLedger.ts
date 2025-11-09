@@ -4,16 +4,22 @@ import { LedgerType } from "../../store/ledgerStore";
 import { devDebug } from "../../utils/utils";
 import { AccountType } from "../Account/Account";
 
-export async function useCreateLedger({ request }: any) {
+export async function useCreateLedger(data: {
+  accounts: string,
+  id: number,
+  date: string,
+  description: string,
+  credit_account: number,
+  debit_account: number,
+  credit_amount: number,
+  debit_amount: number
+}) {
   devDebug("createLedger", function () {
-    console.log(request);
+    console.log(data);
   })
 
   const today = new Date();
   const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`; // Format: "YYYY-MM-DD"
-
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData)
 
   const selectedCreditData = JSON.parse(data.accounts).filter((x: AccountType) => x.id == data.credit_account)
   const selectedDebitData = JSON.parse(data.accounts).filter((x: AccountType) => x.id == data.debit_account)
@@ -28,20 +34,5 @@ export async function useCreateLedger({ request }: any) {
   }
 
   const addedLedger = await addLedger(ledger);
-  toast.success("Ledger successfully added");
   return window.history.back()
 }
-
-// TODO: mutate after add ledgers
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import { toast } from "react-hot-toast";
-//
-// const queryClient = useQueryClient()
-// const { mutate: useCreateLedgerMutate } = useMutation({
-//   mutationFn: useCreateLedger,
-//   onSuccess: () => {
-//     toast.success("Ledger successfully added");
-//     queryClient.invalidateQueries({ queryKey: ["groupOfLedger"] });
-//   },
-//   onError: (err) => toast.error(err.message),
-// });

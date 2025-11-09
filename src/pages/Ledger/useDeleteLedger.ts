@@ -1,8 +1,8 @@
-import { ActionFunctionArgs } from "react-router";
+import { Params } from "react-router";
 import { deleteLedger } from "../../services/apiLedger";
 import { devDebug } from "../../utils/utils";
 
-export async function useDeleteLedgerById({ params }: ActionFunctionArgs) {
+export async function useDeleteLedgerById(params: Params<string>) {
   const ledger = {
     id: Number(params.theId)
   }

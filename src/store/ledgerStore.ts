@@ -20,15 +20,9 @@ export type LedgerUpdateType = {
   id?: number,
   description?: string
   date?: string,
-  credit_account?: {
-    id?: number,
-    desc?: string
-  }
+  credit_account?: number
   credit_amount?: number
-  debit_account?: {
-    id?: number,
-    desc?: string
-  }
+  debit_account?: number
   debit_amount?: number
 }
 
