@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import { useLoaderData, useNavigate } from "react-router"
 import { Form } from "react-router-dom"
 import { useForm, UseFormRegisterReturn } from "react-hook-form"
@@ -39,10 +39,19 @@ function LedgerAdding() {
 
     function onSubmitHandler(data: any) {
         reset()
+        let reqAddData = {
+            ...data,
+            date: selectedDate
+        }
         devDebug("[LedgerAdding] onSubmitHandler - tsx: data", () => {
-            console.log(data)
+            console.log(reqAddData)
         })
-        useCreateLedgerMutate(data)
+        useCreateLedgerMutate(reqAddData)
+    }
+
+    function onChangeDateHandler(e: ChangeEvent<HTMLInputElement>) {
+        let value = e.target.value
+        setSelectedDate(value)
     }
 
     return (
@@ -50,7 +59,7 @@ function LedgerAdding() {
             <Form onSubmit={handleSubmit(onSubmitHandler)} method="POST" className="border rounded-xl ml-2 mr-4">
                 <div className="flex my-2 mx-2 mt-5">
                     <p className="mr-2">Date: </p>
-                    <input type="text" placeholder="Date" className="border rounded-sm" defaultValue={selectedDate} {...register("date")} />
+                    <input type="text" placeholder="Date" className="border rounded-sm" defaultValue={selectedDate} {...register("date")} onChange={(e) => onChangeDateHandler(e)} />
                     <br />
                 </div>
                 <div className="flex my-2 mx-2">
