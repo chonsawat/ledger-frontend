@@ -13,11 +13,14 @@ export async function fetchLedgers() {
 }
 
 export async function fetchLedgersAsGroup() {
-  const res = await fetch(`${API_URL}/api/ledgerGroupByDate`);
+  const res = await fetch(`${API_URL}/api/ledgerGroupByDate/v2`);
 
   if (!res.ok) throw Error("Fail to fetch data")
 
   const data = await res.json();
+  devDebug("[fetchLedgersAsGroup] - API", function() {
+    console.log(data);
+  })
   return data
 }
 

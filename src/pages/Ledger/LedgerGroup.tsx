@@ -1,17 +1,18 @@
 import { useNavigate } from "react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { formatCurrency, useShortcut } from "../../utils/utils";
 import { LedgerType, useSearch } from "../../store/ledgerStore";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFetchLedgerAsGroup } from "./useFetchLedgersAsGroup";
 import Loading from "../Loading/Loading";
+import { GroupOfLedgerType, LedgerGroupByDateType } from "./DefineLedgerType";
 
-type GroupOfLedgerType = { [date: string]: LedgerType[] };
 
+// TODO: Change to use api LedgerFroup Version 2
 function LedgerGroup() {
   const searchLedger = useSearch((state) => state.searchText);
 
-  const { data: groupOfLedger, isLoading } = useQuery<GroupOfLedgerType>({
+  const { data: ledgerGroupByDate, isLoading } = useQuery<LedgerGroupByDateType[]>({
     queryKey: ["groupOfLedger"],
     queryFn: useFetchLedgerAsGroup,
   });
@@ -26,48 +27,45 @@ function LedgerGroup() {
       <div className="table-ledger-content my-5 mx-5">
         <SearchBar></SearchBar>
         <div className="flex flex-col items-center">
-          {Object.entries(groupOfLedger!).length > 0
-            ? Object.entries(groupOfLedger!)?.map(
-              ([key, ledgerByDate]: [string, LedgerType[]]) => {
-                const filteredLedger: LedgerType[] = ledgerByDate.filter(
-                  (x) =>
-                    x.description
-                      ? x.description
-                        .toLowerCase()
-                        .includes(searchLedger.toLowerCase())
-                      : null,
-                );
-                const totalSummary: TotalBalance = {
-                  totalCredit: filteredLedger.reduce(
-                    (accumulate, current) =>
-                      (accumulate += current.credit_amount),
-                    0,
-                  ),
-                  totalDebit: filteredLedger.reduce(
-                    (accumulate, current) =>
-                      (accumulate += current.debit_amount),
-                    0,
-                  ),
-                };
+          {ledgerGroupByDate?.map(
+            ({ date, data }: LedgerGroupByDateType) => {
+              const filteredLedger: LedgerType[] = data.filter(
+                (x) =>
+                  x.description
+                    ? x.description
+                      .toLowerCase()
+                      .includes(searchLedger.toLowerCase())
+                    : null,
+              );
+              const totalSummary: TotalBalance = {
+                totalCredit: filteredLedger.reduce(
+                  (accumulate, current) =>
+                    (accumulate += current.credit_amount),
+                  0,
+                ),
+                totalDebit: filteredLedger.reduce(
+                  (accumulate, current) =>
+                    (accumulate += current.debit_amount),
+                  0,
+                ),
+              };
 
-                if (filteredLedger.length > 0) {
-                  return (
-                    <div key={key} className="w-full">
-                      <table className="text-center min-w-max shadow-md w-full">
-                        <TableHeader></TableHeader>
-                        <TableBody
-                          date={key}
-                          data={filteredLedger}
-                        ></TableBody>
-                      </table>
-                      <Summary data={totalSummary}></Summary>
-                      <div className="mb-10"></div>
-                    </div>
-                  );
-                }
-              },
-            )
-            : "NONE"}
+              if (filteredLedger.length > 0) {
+                return (
+                  <div key={date} className="w-full">
+                    <table className="text-center min-w-max shadow-md w-full">
+                      <TableHeader></TableHeader>
+                      <TableBody
+                        date={date}
+                        data={filteredLedger}
+                      ></TableBody>
+                    </table>
+                    <Summary data={totalSummary}></Summary>
+                    <div className="mb-10"></div>
+                  </div>
+                );
+              }
+            })}
         </div>
       </div>
     </div>
