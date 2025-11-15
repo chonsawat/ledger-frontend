@@ -5,12 +5,7 @@ import { usefetchAccounts } from "./useFetchAccounts"
 import Loading from "../Loading/Loading"
 import { useAccounts } from "../../store/accountStore"
 import { useEffect } from "react"
-
-export type AccountType = {
-    id: number,
-    desc?: string,
-    balance: number
-}
+import { AccountType } from "./DefineAccountsType"
 
 function Accounts() {
     const { data, isLoading } = useQuery<AccountType[]>({
@@ -93,9 +88,18 @@ function UpdateBtn() {
 }
 
 function AddBtn() {
+    const navigate = useNavigate();
+
+    const variants = {
+        addBtn: `
+            hover:cursor-pointer border rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce
+        `,
+    }
+
+
     return (
         <div className="mx-5 add-ledger-content mb-5">
-            <a className="hover:cursor-pointer border rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce">Add Account</a>
+            <a className={variants.addBtn} onClick={() => {navigate("/accounts/add")}}>Add Account</a>
         </div>
     )
 }
