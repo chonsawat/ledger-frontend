@@ -6,6 +6,7 @@ import { LedgerType, useSearch } from "../../store/ledgerStore";
 import { useFetchLedgerAsGroup } from "./useFetchLedgersAsGroup";
 import Loading from "../Loading/Loading";
 import { LedgerGroupByDateType } from "./DefineLedgerType";
+import React from "react";
 
 
 function LedgerGroup() {
@@ -23,8 +24,8 @@ function LedgerGroup() {
 
   return (
     <div>
+      <SearchBar></SearchBar>
       <div className="table-ledger-content my-5 mx-5">
-        <SearchBar></SearchBar>
         <div className="flex flex-col items-center">
           {ledgerGroupByDate?.map(
             ({ date, data }: LedgerGroupByDateType) => {
@@ -51,8 +52,8 @@ function LedgerGroup() {
 
               if (filteredLedger.length > 0) {
                 return (
-                  <div key={date} className="w-full">
-                    <table className="text-center min-w-max shadow-md w-full">
+                  <React.Fragment key={date}>
+                    <table className="text-center min-w-fit shadow-md w-full h-full">
                       <TableHeader></TableHeader>
                       <TableBody
                         date={date}
@@ -61,7 +62,7 @@ function LedgerGroup() {
                     </table>
                     <Summary data={totalSummary}></Summary>
                     <div className="mb-10"></div>
-                  </div>
+                  </React.Fragment>
                 );
               }
             })}
@@ -84,30 +85,54 @@ function Summary({ data }: { data: TotalBalance }) {
 }
 
 function TableHeader() {
+  const variants = {
+    date: `
+      border-spacing-5 rounded-2xl py-1 px-2 bg-slate-800 text-white
+      text-[10px] w-64
+      sm:w-32
+      md:text-[12px] md:py-3
+    `,
+    detail: `
+      border-spacing-5 rounded-2xl py-1 px-2 bg-slate-800 text-white
+      text-[10px] w-[20%]
+      md:text-[12px] md:w-[30%] md:py-3
+    `,
+    creditAcc: `
+      border-spacing-5 rounded-2xl py-1 px-2 bg-slate-800 text-white
+      text-[10px] 
+      md:text-[12px] md:py-3
+    `,
+    creditAmt: `
+      border-spacing-5 rounded-2xl py-1 px-2 bg-slate-800 text-white
+      text-[10px] 
+      md:text-[12px] md:py-3
+    `,
+    debitAcc: `
+      border-spacing-5 rounded-2xl py-1 px-2 bg-slate-800 text-white
+      text-[10px] 
+      md:text-[12px] md:py-3
+    `,
+    debitAmt: `
+      border-spacing-5 rounded-2xl py-1 px-2 bg-slate-800 text-white
+      text-[10px] 
+      md:text-[12px] md:py-3
+    `,
+    update: `
+      border-spacing-5 rounded-2xl py-1 px-2 bg-slate-800 text-white 
+      text-[10px]
+      md:text-[12px] md:py-3
+    `,
+  }
   return (
     <thead>
       <tr>
-        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">
-          Date
-        </th>
-        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-[50%]">
-          Detail
-        </th>
-        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">
-          Credit Account
-        </th>
-        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">
-          Credit Amount
-        </th>
-        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">
-          Debit Account
-        </th>
-        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white">
-          Debit Amount
-        </th>
-        <th className="border-spacing-5 rounded-2xl py-3 px-2 bg-slate-800 text-white w-4">
-          Update
-        </th>
+        <th className={variants.date}> Date </th>
+        <th className={variants.detail}> Detail </th>
+        <th className={variants.creditAcc}> Credit Account </th>
+        <th className={variants.creditAmt}> Credit Amount </th>
+        <th className={variants.debitAcc}> Debit Account </th>
+        <th className={variants.debitAmt}> Debit Amount </th>
+        <th className={variants.update}> Update </th>
       </tr>
     </thead>
   );
@@ -134,10 +159,20 @@ function AddButton() {
     onClickAddHandler();
   });
 
+  const variants = {
+    btndiv: `
+      mx-5 add-ledger-content my-5 
+      w-full max-w-30
+    `,
+    btnA: `
+      hover:cursor-pointer border rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce
+    `
+  }
+
   return (
-    <div className="mx-5 add-ledger-content my-5 sm:w-[20%] md:w-[20%] md:mr-0">
+    <div className={variants.btndiv}>
       <a
-        className="hover:cursor-pointer border rounded-xl p-3 bg-gray-300 hover:bg-lime-500 text-bold text-white animate-bounce"
+        className={variants.btnA}
         onClick={onClickAddHandler}
       >
         Add Ledger
@@ -153,13 +188,24 @@ function SearchBar() {
     setSearchLedger(e.target.value);
   }
 
+  const variants = {
+    temp: `
+      mr-5 mt-2.5 mb-5 py-2 px-3 border rounded-xl border-gray-500
+      w-full max-w-100
+      sm:max-w-145 
+      md:max-w-210
+      lg:max-w-280
+      xl:max-w-full
+    `
+  }
+
   return (
     <div className="flex">
       <AddButton></AddButton>
       <input
         type="text"
         placeholder="Search Desc"
-        className="w-420 mt-2.5 mb-5 py-2 px-3 border rounded-xl border-gray-500 sm:w-[75%] md:w-[90%] lg:w-full"
+        className={variants.temp}
         onChange={(e) => onChangeHandler(e)}
       />
     </div>
@@ -177,6 +223,13 @@ function FoundRow({ ledger }: { ledger: LedgerType }) {
     navigate(`/ledger/update/${theId}`);
   }
 
+  function formatText(text: string, maxLength: number = 10) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + "..."
+    }
+    return text
+  }
+
   return (
     <tr
       key={ledger.id}
@@ -190,22 +243,22 @@ function FoundRow({ ledger }: { ledger: LedgerType }) {
       >
         {ledger.date}
       </td>
-      <td className="p-4 border-b border-gray-200">{ledger.description}</td>
+      <td className="p-4 border-b border-gray-200">{formatText(ledger.description, 20)}</td>
       <td className="p-4 border-b border-gray-200">
-        {ledger.credit_account ? ledger.credit_account.desc : ""}
+        {ledger.credit_account ? formatText(ledger.credit_account.desc) : ""}
       </td>
       <td className="p-4 border-b border-gray-200 text-end">
         {formatCurrency(ledger.credit_amount)}
       </td>
       <td className="p-4 border-b border-gray-200">
-        {ledger.debit_account ? ledger.debit_account.desc : ""}
+        {ledger.debit_account ? formatText(ledger.debit_account.desc) : ""}
       </td>
       <td className="p-4 border-b border-gray-200 text-end">
         {formatCurrency(ledger.debit_amount)}
       </td>
-      <td className="p-4 border-b border-gray-200">
+      <td className="p-2 border-b border-gray-200">
         <a
-          className="hover:bg-orange-500 hover:cursor-pointer bg-gray-200 text-white p-3 rounded-xl"
+          className="hover:bg-orange-500 hover:cursor-pointer bg-gray-200 text-white rounded-xl p-1.5 sm:p-2"
           onClick={() => {
             onClickUpdateHandler(ledger.id!);
           }}
