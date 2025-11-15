@@ -19,7 +19,7 @@ function LedgerById() {
         mutationFn: useDeleteLedgerById,
         onSuccess: () => {
             toast.success("Ledger successfully deleted");
-            queryClient.invalidateQueries({ queryKey: ["groupOfLedger"] });
+            queryClient.invalidateQueries({ queryKey: ["groupOfLedger", "accounts"] });
         },
         onError: (err) => toast.error(err.message),
     });

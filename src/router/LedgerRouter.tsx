@@ -13,12 +13,12 @@ import { useUpdateLedger } from "../pages/Ledger/useUpdateLedger";
 import { useFetchLedger } from "../pages/Ledger/useFetchLedger";
 import { useFetchForUpdateLedger } from "../pages/Ledger/useFetchForUpdateLedger";
 
-import { LedgerType } from "../store/ledgerStore";
+import { UseCreateLedgerType } from "../pages/Ledger/DefineLedgerType";
 
 export default [
   { path: "/ledger", element: <Ledger></Ledger>, loader: useFetchLedger },
   { path: "/ledger/groupByDate", element: <LedgerGroup></LedgerGroup>, loader: useFetchLedgerAsGroup },
-  { path: "/ledger/add", element: <LedgerAdding></LedgerAdding>, loader: usefetchAccounts, action: (e: LedgerType) => useCreateLedger(e) },
+  { path: "/ledger/add", element: <LedgerAdding></LedgerAdding>, loader: usefetchAccounts, action: (e: UseCreateLedgerType) => useCreateLedger(e) },
   { path: "/ledger/update/:theId", element: <LedgerUpdate></LedgerUpdate>, loader: useFetchForUpdateLedger as any, action: useUpdateLedger },
   { path: "/ledger/:theId", element: <LedgerById></LedgerById>, loader: useFetchLedgerById as any, action: useDeleteLedgerById },
 ]

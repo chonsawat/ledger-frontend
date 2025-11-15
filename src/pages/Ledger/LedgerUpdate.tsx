@@ -2,10 +2,9 @@ import { Form, useLoaderData, useNavigate, useParams } from "react-router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { AccountType } from "../Account/Account";
 import {
-  LedgerType,
   LedgerUpdateType,
   useNewLedger,
-  newLedgerDetailAccountSelectedType,
+  newLedgerDetailAccountSelectedType
 } from "../../store/ledgerStore";
 import { DataType, useUpdateLedger } from "./useUpdateLedger";
 import { devDebug } from "../../utils/utils";
@@ -32,7 +31,7 @@ function LedgerUpdate() {
     mutationFn: useUpdateLedger,
     onSuccess: () => {
       toast.success("Ledger successfully updated");
-      queryClient.invalidateQueries({ queryKey: ["groupOfLedger"] });
+      queryClient.invalidateQueries({ queryKey: ["groupOfLedger", "accounts"] });
     },
     onError: (err) => toast.error(err.message),
   });

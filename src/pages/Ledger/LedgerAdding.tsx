@@ -32,7 +32,7 @@ function LedgerAdding() {
         mutationFn: useCreateLedger,
         onSuccess: () => {
             toast.success("Ledger successfully added");
-            queryClient.invalidateQueries({ queryKey: ["groupOfLedger"] });
+            queryClient.invalidateQueries({ queryKey: ["groupOfLedger", "accounts"] });
         },
         onError: (err) => toast.error(err.message),
     });

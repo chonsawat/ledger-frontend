@@ -3,17 +3,9 @@ import { addLedger } from "../../services/apiLedger";
 import { LedgerType } from "../../store/ledgerStore";
 import { devDebug } from "../../utils/utils";
 import { AccountType } from "../Account/Account";
+import { UseCreateLedgerType } from "./DefineLedgerType";
 
-export async function useCreateLedger(data: {
-  accounts: string,
-  id: number,
-  date: string,
-  description: string,
-  credit_account: number,
-  debit_account: number,
-  credit_amount: number,
-  debit_amount: number
-}) {
+export async function useCreateLedger(data: UseCreateLedgerType) {
   devDebug("createLedger", function () {
     console.log(data);
   })

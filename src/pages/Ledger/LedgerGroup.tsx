@@ -5,10 +5,9 @@ import { formatCurrency, useShortcut } from "../../utils/utils";
 import { LedgerType, useSearch } from "../../store/ledgerStore";
 import { useFetchLedgerAsGroup } from "./useFetchLedgersAsGroup";
 import Loading from "../Loading/Loading";
-import { GroupOfLedgerType, LedgerGroupByDateType } from "./DefineLedgerType";
+import { LedgerGroupByDateType } from "./DefineLedgerType";
 
 
-// TODO: Change to use api LedgerFroup Version 2
 function LedgerGroup() {
   const searchLedger = useSearch((state) => state.searchText);
 

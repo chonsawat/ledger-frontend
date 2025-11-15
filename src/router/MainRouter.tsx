@@ -9,7 +9,7 @@ export default [
     path: "/", element: <AppLayout></AppLayout>, children: [
       { path: "/", element: <HomePage></HomePage>},
       ...AccountRouter,
-      ...LedgerRouter
+      ...LedgerRouter,
     ]
   },
 ]
