@@ -29,7 +29,7 @@ export async function deleteAccountById(theId: number): Promise<AccountType> {
     console.log("theId: " + theId)
   })
 
-  const res = await ky.delete(`${API_URL}/api/accounts`, { json: { thdId: theId } } as Object)
+  const res = await ky.delete(`${API_URL}/api/accounts`, { json: { id: theId } } as Object)
   return res.json<AccountType>()
 }
 

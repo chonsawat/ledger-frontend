@@ -9,13 +9,19 @@ export async function useCreateAccounts(newAccount: UseNewAccountType): Promise<
     original_balance: Number(newAccount.originalBalance) | 0
   };
 
-  devDebug("useCreateAccounts",() => {
+  devDebug("useCreateAccounts", () => {
     console.log(request)
   })
   return await createAccounts(request);
 }
 
-export async function useDeleteAccounts(deleteAccount: AccountType): Promise<AccountType> {
+type UseDeleteT = {
+  id: number
+}
+export async function useDeleteAccounts(deleteAccount: UseDeleteT): Promise<AccountType> {
+  devDebug("useDeleteAccounts", () => {
+    console.log(deleteAccount)
+  })
   return await deleteAccountById(deleteAccount.id);
 }
 
