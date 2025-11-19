@@ -11,10 +11,10 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "noEmit": true,
     "strictNullChecks": true,
   },
-  "include": ["./src", "vite-env.d.ts"],
+  "include": ["./src", "vite-env.d.ts", "./.storybook"],
 }
