@@ -1,4 +1,4 @@
-import { AccountType, CreateAccountType, UseNewAccountType } from "../types/DefineAccountsType";
+import { AccountType, CreateAccountType,  } from "../types/DefineAccountsType";
 import { devDebug } from "../utils/utils";
 import ky from "ky";
 
@@ -34,7 +34,7 @@ export async function deleteAccountById(theId: number): Promise<AccountType> {
 }
 
 export async function updateAccountsById(newAccounts: AccountType) {
-  devDebug("deleteAccountById", () => {
+  devDebug("updateAccountsById", () => {
     console.log(newAccounts)
   })
 
@@ -42,7 +42,7 @@ export async function updateAccountsById(newAccounts: AccountType) {
   return res.json<AccountType>()
 }
 
-export async function createAccounts(newAccount: CreateAccountType): Promise<UseNewAccountType> {
+export async function createAccounts(newAccount: CreateAccountType): Promise<AccountType> {
   devDebug("API - createAccounts", () => {
     console.log(newAccount);
     console.log(document);
@@ -52,5 +52,5 @@ export async function createAccounts(newAccount: CreateAccountType): Promise<Use
       ...newAccount
     }
   } as Object)
-  return res.json<UseNewAccountType>()
+  return res.json<AccountType>()
 }

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { useLoaderData, useNavigate, useParams } from 'react-router';
-import LedgerTableC from '../../components/Responsive/LedgerTableC';
+import LedgerTableC from '../../components/Table/LedgerTableC';
 import { fetchLedgerByCreditAccountId, fetchLedgerByDebitAccountId } from '../../services/apiLedger';
 import { useDeleteAccounts } from '../../services/implements/useAccountAPI';
 import { LedgerType } from '../../types/DefineLedgerType';
@@ -30,8 +30,18 @@ export default function AccountById() {
         <p>UpdateDate: {theAccount.updateDate}</p>
         <div className='mt-5'>
           <DeleteButtonC id={theAccount.id}></DeleteButtonC>
-          <button className={variants.showCredit} onClick={() => { setShowCredit((prev) => !prev) }}>Show Credit</button>
-          <button className={variants.showDebit} onClick={() => { setShowDebit((prev) => !prev) }}>Show Debit</button>
+          <button className={variants.showCredit} onClick={() => {
+            if (showDebit === true && showCredit === false) {
+              setShowDebit((prev) => !prev)
+            }
+            setShowCredit((prev) => !prev)
+          }}>Show Credit</button>
+          <button className={variants.showDebit} onClick={() => {
+            if (showDebit === false && showCredit === true) {
+              setShowCredit((prev) => !prev)
+            }
+            setShowDebit((prev) => !prev)
+          }}>Show Debit</button>
         </div>
       </div>
       <div>

@@ -1,12 +1,12 @@
 import { createAccounts, deleteAccountById, updateAccountsById } from "../../services/apiAccounts";
-import { AccountType, CreateAccountType, UseNewAccountType } from "../../types/DefineAccountsType";
+import { AccountType, CreateAccountType,  } from "../../types/DefineAccountsType";
 import { devDebug } from "../../utils/utils";
 
-export async function useCreateAccounts(newAccount: UseNewAccountType): Promise<UseNewAccountType> {
+export async function useCreateAccounts(newAccount: AccountType): Promise<AccountType> {
   const request: CreateAccountType = {
     id: 0,
-    desc: newAccount.description,
-    original_balance: Number(newAccount.originalBalance) | 0
+    desc: newAccount.desc || "<< Empty >>",
+    original_balance: Number(newAccount.original_balance) | 0
   };
 
   devDebug("useCreateAccounts", () => {

@@ -1,16 +1,16 @@
 import { create } from "zustand";
-import { AccountType, UseNewAccountType } from "../types/DefineAccountsType";
+import { AccountType } from "../types/DefineAccountsType";
 
 export const useNewAccount = create<
-  { newAccounts: UseNewAccountType }
-  & { setNewAccounts: (x: UseNewAccountType) => void }
+  { newAccounts: AccountType }
+  & { setNewAccounts: (x: AccountType) => void }
 >((set, get) => ({
   newAccounts: {
     id: 0,
-    description: "",
-    originalBalance: 0,
+    desc: "",
+    original_balance: 0,
   },
-  setNewAccounts: (newValue: UseNewAccountType) => set({
+  setNewAccounts: (newValue: AccountType) => set({
     newAccounts: {
       ...get().newAccounts,
       ...newValue

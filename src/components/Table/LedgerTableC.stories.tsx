@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ResponsiveUIIndicator from "./ResponsiveUIIndicator";
+import ResponsiveUIIndicator from "../Responsive/ResponsiveUIIndicator";
 import LedgerTableC from "./LedgerTableC";
 
 const meta = {

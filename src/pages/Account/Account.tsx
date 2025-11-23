@@ -81,10 +81,10 @@ function AccountRow() {
             {accounts?.map((x) => {
                 return (
                     <tr key={x.id} className="hover:text-bold hover:text-black hover:bg-gray-200">
-                        <td className="p-4 border-b border-gray-200 hover:cursor-pointer" onClick={() => onClickDateHandler(x.id)}>{x.id}</td>
+                        <td className="p-4 border-b border-gray-200 hover:cursor-pointer" onClick={() => onClickDateHandler(x.id!)}>{x.id}</td>
                         <td className="p-4 border-b border-gray-200" >{x.desc}</td>
-                        <td className="p-4 border-b border-gray-200 text-end currency-text ">{formatCurrency(x.balance)}</td>
-                        <UpdateBtn id={x.id}></UpdateBtn>
+                        <td className="p-4 border-b border-gray-200 text-end currency-text ">{formatCurrency(x.balance!)}</td>
+                        <UpdateBtn id={x.id!}></UpdateBtn>
                     </tr>
                 )
             })}

@@ -1,10 +1,10 @@
-import { MutationFunction, useMutation, useMutationState, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ChangeEvent, useEffect } from "react"
-import { useForm, useFormContext } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
-import { Form, useNavigate, useSubmit } from "react-router"
-import { useAccounts, useNewAccount } from "../../store/accountStore"
+import { Form, useNavigate } from "react-router"
 import { useCreateAccounts } from "../../services/implements/useAccountAPI"
+import { useNewAccount } from "../../store/accountStore"
 
 function AccountAddPage() {
     const { handleSubmit, register } = useForm()
@@ -37,15 +37,15 @@ function AccountAddPage() {
 
     const inputFormAttribute = {
         description: {
-            ...register("description"),
+            ...register("desc"),
             title: "Desciption",
-            defaultValue: "Desciption",
+            defaultValue: data.desc,
             onChange: (e: ChangeEvent<HTMLInputElement>) => { onChangeHandler(e) }
         },
         originalBalance: {
-            ...register("originalBalance"),
+            ...register("original_balance"),
             title: "Original Balance",
-            defaultValue: 0,
+            defaultValue: data.original_balance,
             onChange: (e: ChangeEvent<HTMLInputElement>) => { onChangeHandler(e) }
         }
     }
@@ -53,6 +53,14 @@ function AccountAddPage() {
     const variants = {
         input: "px-3 py-1 bg-lime-500 text-white rounded-2xl hover:cursor-pointer"
     }
+
+    useEffect(() => {
+        setData({
+            ...data,
+            original_balance: 0,
+            desc: "Description Draft"
+        })
+    }, [])
 
     return (
         <div className="mt-5 mx-2">
@@ -70,13 +78,12 @@ function AccountAddPage() {
 function InputForm(props: { title: string }) {
     const variants = {
         input: `
-            focus:animate-pulse border rounded-lg
+            focus:animate-pulse border rounded-lg pl-1
         `
     }
 
     useEffect(() => {
-        console.log(props);
-
+        // console.log(props);
     }, [])
     return (
         <div className="mx-5 my-2">

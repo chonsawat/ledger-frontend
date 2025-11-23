@@ -106,7 +106,7 @@ function CreditAccountDropDown({ register }: { register: (name: string) => UseFo
             <label htmlFor="credit_account" className='mr-2'>Credit Account: </label>
             <select {...register("credit_account")} id="credit_account" value={credit_account} onChange={handleAccountChangeCredit} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
-                {accounts.map((account: AccountType) => (
+                {accounts?.map((account: AccountType) => (
                     <option key={account.id} value={account.id}>
                         {account.id} : {account.desc}
                     </option>
@@ -130,7 +130,7 @@ function DebitAccountDropDown({ register }: { register: (name: string) => UseFor
             <label htmlFor="debit_account" className='mr-2'>Debit Account: </label>
             <select {...register("debit_account")} id="debit_account" value={debit_account} onChange={handleAccountChangeDebit} className="border rounded-sm">
                 <option value={0}>Select an accounts</option>
-                {accounts.map((account: AccountType) => (
+                {accounts?.map((account: AccountType) => (
                     <option key={account.id} value={account.id}>
                         {account.id} : {account.desc}
                     </option>
