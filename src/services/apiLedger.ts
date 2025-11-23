@@ -1,4 +1,5 @@
-import { LedgerType } from "../store/ledgerStore";
+import ky from "ky";
+import { LedgerType } from "../types/DefineLedgerType";
 import { devDebug } from "../utils/utils";
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -18,7 +19,7 @@ export async function fetchLedgersAsGroup() {
   if (!res.ok) throw Error("Fail to fetch data")
 
   const data = await res.json();
-  devDebug("[fetchLedgersAsGroup] - API", function() {
+  devDebug("[fetchLedgersAsGroup] - API", function () {
     console.log(data);
   })
   return data
@@ -40,9 +41,25 @@ export async function fetchLedgerById(theId: number) {
   return data
 }
 
+export async function fetchLedgerByCreditAccountId(id: number) {
+  const data = await ky.get(`${API_URL}/api/ledgerByCreditAccount/${id}`).json<LedgerType[]>()
+  devDebug("fetchLedgerByCreditAccountId", () => {
+    console.log(data);
+  })
+  return data
+}
+
+export async function fetchLedgerByDebitAccountId(id: number) {
+  const data = await ky.get(`${API_URL}/api/ledgerByDebitAccount/${id}`).json<LedgerType[]>()
+  devDebug("fetchLedgerByDebitAccountId", () => {
+    console.log(data);
+  })
+  return data
+}
+
 export async function addLedger(newLedger: unknown) {
   try {
-    devDebug("addLedger - API", function() {
+    devDebug("addLedger - API", function () {
       console.log(newLedger);
     })
 

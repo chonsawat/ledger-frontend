@@ -1,4 +1,4 @@
-import { AccountType, CreateAccountType, UseNewAccountType } from "../pages/Account/DefineAccountsType";
+import { AccountType, CreateAccountType, UseNewAccountType } from "../types/DefineAccountsType";
 import { devDebug } from "../utils/utils";
 import ky from "ky";
 

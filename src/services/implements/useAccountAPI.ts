@@ -1,6 +1,6 @@
 import { createAccounts, deleteAccountById, updateAccountsById } from "../../services/apiAccounts";
+import { AccountType, CreateAccountType, UseNewAccountType } from "../../types/DefineAccountsType";
 import { devDebug } from "../../utils/utils";
-import { AccountType, CreateAccountType, UseNewAccountType } from "./DefineAccountsType";
 
 export async function useCreateAccounts(newAccount: UseNewAccountType): Promise<UseNewAccountType> {
   const request: CreateAccountType = {

@@ -1,19 +1,17 @@
 import { Form, useLoaderData, useNavigate, useParams } from "react-router";
 import { ChangeEvent, useEffect, useState } from "react";
-import { AccountType } from "../Account/Account";
+import { AccountType } from "../../types/DefineAccountsType";
 import {
-  LedgerUpdateType,
   useNewLedger,
-  newLedgerDetailAccountSelectedType
 } from "../../store/ledgerStore";
-import { DataType, useUpdateLedger } from "./useUpdateLedger";
 import { devDebug } from "../../utils/utils";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { LedgerUpdateType, newLedgerDetailAccountSelectedType } from "../../types/DefineLedgerType";
+import { DataType, useUpdateLedger } from "../../services/implements/useUpdateLedger";
 
 function LedgerUpdate() {
-  const [theLedger, setTheLedger] = useState<LedgerUpdateType>();
   const { ledger, accounts } = useLoaderData<{
     ledger: LedgerUpdateType;
     accounts: AccountType;
@@ -191,3 +189,7 @@ function ButtonSubmit() {
 
 
 export default LedgerUpdate;
+function setTheLedger(ledger: LedgerUpdateType) {
+  throw new Error("Function not implemented.");
+}
+

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { AccountType, UseNewAccountType } from "../pages/Account/DefineAccountsType";
+import { AccountType, UseNewAccountType } from "../types/DefineAccountsType";
 
 export const useNewAccount = create<
   { newAccounts: UseNewAccountType }

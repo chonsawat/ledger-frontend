@@ -1,5 +1,5 @@
 import { Params } from "react-router";
-import { fetchAccountById } from "../../services/apiAccounts";
+import { fetchAccountById } from "../apiAccounts";
 import { devDebug } from "../../utils/utils";
 
 export async function useFetchAccountById({ params }: { params: Params<string> }) {

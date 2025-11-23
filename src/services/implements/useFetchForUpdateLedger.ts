@@ -1,6 +1,6 @@
-import { fetchAccounts } from "../../services/apiAccounts";
-import { fetchLedgerById } from "../../services/apiLedger";
 import { devDebug } from "../../utils/utils";
+import { fetchAccounts } from "../apiAccounts";
+import { fetchLedgerById } from "../apiLedger";
 
 export async function useFetchForUpdateLedger({
   params: { theId },

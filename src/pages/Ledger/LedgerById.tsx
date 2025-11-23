@@ -4,8 +4,8 @@ import { ActionFunctionArgs, Form, LoaderFunctionArgs, redirect, useLoaderData, 
 import { devDebug, formatCurrency } from '../../utils/utils';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useDeleteLedgerById } from './useDeleteLedger';
 import toast from 'react-hot-toast';
+import { useDeleteLedgerById } from '../../services/implements/useDeleteLedger';
 
 function LedgerById() {
     const ledger = useLoaderData()

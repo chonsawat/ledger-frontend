@@ -1,5 +1,5 @@
-import { fetchAccounts } from "../../services/apiAccounts"
-import { devDebug } from "../../utils/utils"
+import { devDebug } from "../../utils/utils";
+import { fetchAccounts } from "../apiAccounts";
 
 export async function usefetchAccounts() {
   const data = await fetchAccounts()

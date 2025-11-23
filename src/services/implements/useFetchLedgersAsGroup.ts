@@ -1,5 +1,5 @@
-import { fetchLedgersAsGroup } from "../../services/apiLedger";
 import { devDebug } from "../../utils/utils";
+import { fetchLedgersAsGroup } from "../apiLedger";
 
 export async function useFetchLedgerAsGroup() {
   devDebug("useFetchLedgerAsGroup", () => { })

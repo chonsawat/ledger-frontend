@@ -1,9 +1,8 @@
 import toast from "react-hot-toast";
-import { addLedger } from "../../services/apiLedger";
-import { LedgerType } from "../../store/ledgerStore";
+import { LedgerType, UseCreateLedgerType } from "../../types/DefineLedgerType";
 import { devDebug } from "../../utils/utils";
-import { AccountType } from "../Account/Account";
-import { UseCreateLedgerType } from "./DefineLedgerType";
+import { AccountType } from "../../types/DefineAccountsType";
+import { addLedger } from "../apiLedger";
 
 export async function useCreateLedger(data: UseCreateLedgerType) {
   devDebug("createLedger", function () {

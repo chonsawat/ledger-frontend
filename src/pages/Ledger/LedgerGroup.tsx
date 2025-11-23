@@ -2,11 +2,11 @@ import { useNavigate } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { formatCurrency, useShortcut } from "../../utils/utils";
-import { LedgerType, useSearch } from "../../store/ledgerStore";
-import { useFetchLedgerAsGroup } from "./useFetchLedgersAsGroup";
 import Loading from "../Loading/Loading";
-import { LedgerGroupByDateType } from "./DefineLedgerType";
+import { LedgerGroupByDateType, LedgerType } from "../../types/DefineLedgerType";
 import React from "react";
+import { useSearch } from "../../store/ledgerStore";
+import { useFetchLedgerAsGroup } from "../../services/implements/useFetchLedgersAsGroup";
 
 
 function LedgerGroup() {
@@ -224,8 +224,12 @@ function FoundRow({ ledger }: { ledger: LedgerType }) {
   }
 
   function formatText(text: string, maxLength: number = 10) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "..."
+    try {
+      if (text.length > maxLength) {
+        return text.substring(0, maxLength) + "..."
+      }
+    } catch (e) {
+      return "<< Cannot format >>"
     }
     return text
   }

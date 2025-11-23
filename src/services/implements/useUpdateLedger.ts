@@ -1,8 +1,8 @@
 import { Params } from "react-router";
-import { updateLedger } from "../../services/apiLedger";
+import { AccountType } from "../../types/DefineAccountsType";
+import { LedgerType } from "../../types/DefineLedgerType";
+import { updateLedger } from "../apiLedger";
 import { devDebug } from "../../utils/utils";
-import { AccountType } from "../Account/Account";
-import { LedgerType } from "../../store/ledgerStore";
 
 export type DataType = {
   date?: string,

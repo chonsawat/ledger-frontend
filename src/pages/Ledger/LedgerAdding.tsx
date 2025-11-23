@@ -4,11 +4,11 @@ import { Form } from "react-router-dom"
 import { useForm, UseFormRegisterReturn } from "react-hook-form"
 
 import { useNewLedger } from "../../store/ledgerStore"
-import { AccountType } from "../Account/Account"
+import { AccountType } from "../../types/DefineAccountsType"
 import { devDebug, useShortcut } from "../../utils/utils"
-import { useCreateLedger } from "./useCreateLedger"
 import toast from "react-hot-toast"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useCreateLedger } from "../../services/implements/useCreateLedger"
 
 function LedgerAdding() {
     const navigate = useNavigate()

@@ -1,11 +1,11 @@
 import { formatCurrency } from "../../utils/utils"
 import { useNavigate } from "react-router"
 import { useQuery } from "@tanstack/react-query"
-import { usefetchAccounts } from "./useFetchAccounts"
 import Loading from "../Loading/Loading"
 import { useAccounts } from "../../store/accountStore"
 import { useEffect } from "react"
-import { AccountType } from "./DefineAccountsType"
+import { AccountType } from "../../types/DefineAccountsType"
+import { usefetchAccounts } from "../../services/implements/useFetchAccounts"
 
 function Accounts() {
     const { data, isLoading } = useQuery<AccountType[]>({

@@ -2,7 +2,7 @@ import { formatCurrency, useShortcut } from "../../utils/utils";
 import { fetchLedgers } from "../../services/apiLedger";
 import { redirect, useLoaderData, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
-import { LedgerType } from "../../store/ledgerStore";
+import { LedgerType } from "../../types/DefineLedgerType";
 
 function Ledger() {
     const theLedger = useLoaderData()
