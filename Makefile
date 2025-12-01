@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------
 # Deploy
 # ---------------------------------------------------------------
-deploy: clear-old-deploy	
+deploy-only: clear-old-deploy	
 	@echo ""
 	@echo "Docker start container."
 	-docker run -p 3000:3000 --name front_01 -dit --restart=unless-stopped frontend 
@@ -21,7 +21,7 @@ docker-build:
 # ---------------------------------------------------------------
 # Deploy
 # ---------------------------------------------------------------
-build-deploy: clear-old-deploy-and-build
+deploy: clear-old-deploy-and-build
 	@echo ""
 	@echo "Docker start container."
 	-docker run -p 3000:3000 --name front_01 -dit --restart=unless-stopped frontend 

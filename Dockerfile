@@ -4,16 +4,19 @@ FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
 
 FROM base AS install
-COPY production/package.json .
-RUN bun install
+COPY deploy-production/package.json .
+RUN bun install --frozen-lockfile
 
-FROM base AS prerelease
+FROM base AS pre-release
 COPY --from=install /usr/src/app/node_modules node_modules
-COPY production/server.js .
-COPY ./dist .
+COPY --from=install /usr/src/app/package.json package.json
+COPY deploy-production/server.js server.js
 
+FROM pre-release AS release
+COPY dist .
 ENV VITE_TITLE="Ledger Production"
 
 # Deploy
 EXPOSE 3000/tcp
 ENTRYPOINT [ "bun", "run", "deploy" ]
+#ENTRYPOINT [ "ls", "-la" ]
