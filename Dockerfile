@@ -9,8 +9,8 @@ RUN bun install
 
 FROM base AS prerelease
 COPY --from=install /usr/src/app/node_modules node_modules
-# COPY deploy-production/server.js .
-# COPY ./dist .
+COPY deploy-production/server.js .
+COPY ./dist .
 
 ENV VITE_TITLE="Ledger Production"
 
