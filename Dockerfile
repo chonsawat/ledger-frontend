@@ -4,12 +4,13 @@ FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
 
 FROM base AS install
-COPY dist/package.json .
+COPY ./deploy-production/package.json .
 RUN bun install
 
 FROM base AS prerelease
 COPY --from=install /usr/src/app/node_modules node_modules
-COPY ./dist .
+# COPY deploy-production/server.js .
+# COPY ./dist .
 
 ENV VITE_TITLE="Ledger Production"
 

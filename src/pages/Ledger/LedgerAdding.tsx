@@ -10,6 +10,7 @@ import toast from "react-hot-toast"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useCreateLedger } from "../../services/implements/useCreateLedger"
 
+// TODO: Adding mode in credit/debit/transfer
 function LedgerAdding() {
     const navigate = useNavigate()
     const accounts = useLoaderData()

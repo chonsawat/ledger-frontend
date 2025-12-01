@@ -11,6 +11,7 @@ import { AccountType } from "../../types/DefineAccountsType";
 import { LedgerUpdateType, newLedgerDetailAccountSelectedType } from "../../types/DefineLedgerType";
 import { devDebug } from "../../utils/utils";
 
+// TODO: Update mode in credit/debit/transfer
 function LedgerUpdate() {
   const { ledger, accounts } = useLoaderData<{
     ledger: LedgerUpdateType;
